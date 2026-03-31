@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tesla Inventories and Investments</title>
+    <link rel="icon" type="image/svg+xml" href="images/Logo.png">
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <!-- ═══ NAVBAR ═══ -->
+  <!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo" aria-label="Tesla">
+    <img src="images/tesla logo.png" class="logo" alt="logo">
+  </a>
+
+  <ul class="navbar-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="investments.html">Investments</a></li>
+    <li><a href="inventory.html">Inventory</a></li>
+  </ul>
+
+  <div class="navbar-cta">
+    <a href="auth.html">Get started</a>
+  </div>
+
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- ═══ MOBILE MENU ═══ -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="investments.html">Investments</a>
+  <a href="inventory.html">Inventory</a>
+  <div class="mobile-cta">
+    <a href="auth.html">Get started</a>
+  </div>
+</div>
+
+
+    <!-- SECTION 1 — Hero Carousel -->
+    <section class="carousel" id="carousel">
+        <div class="carousel-track" id="carouselTrack">
+            <div class="carousel-slide">
+                <img src="images/Homepage-Promo-Meet-Model-Y-Desktop.avif" alt="Model Y" class="slide-bg video-fallback">
+                <video class="slide-bg carousel-video" autoplay muted loop playsinline>
+                    <source src="images/Homepage-Promo-Carousel-FSD-Supervised-Tablet.webm" type="video/webm">
+                </video>
+                <div class="slide-content">
+                    <h1 class="slide-title">Full Self-Driving (Supervised)</h1>
+                    <p class="slide-subtitle">Available for $99/mo</p>
+                    <div class="slide-buttons">
+                        <a href="inventory.html" class="btn-primary">View Inventory </a>
+                        <a href="investments.html" class="btn-secondary">Investments</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <img src="images/Homepage-Promo-Model-3-Desktop-US-CA-MX.avif" alt="Model 3 promo" class="slide-bg">
+                <div class="slide-content">
+                    <h1 class="slide-title">Model 3</h1>
+                    <p class="slide-subtitle">0.99% APR Available</p>
+                    <div class="slide-buttons">
+                        <a href="inventory.html" class="btn-primary">View Inventory </a>
+                        <a href="investments.html" class="btn-secondary">Investments</a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <img src="images/Homepage-Promo-Meet-Model-Y-Desktop.avif" alt="Model Y promo" class="slide-bg">
+                <div class="slide-content slide-content--light">
+                    <h1 class="slide-title">Model Y</h1>
+                    <p class="slide-subtitle">0% APR Available</p>
+                    <div class="slide-buttons">
+                        <a href="inventory.html" class="btn-primary">View Inventory </a>
+                        <a href="investments.html" class="btn-secondary btn-secondary--light">Investments</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-arrow carousel-prev" id="prevBtn" aria-label="Previous slide">&#8249;</button>
+        <button class="carousel-arrow carousel-next" id="nextBtn" aria-label="Next slide">&#8250;</button>
+        <div class="carousel-dots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+        </div>
+    </section>
+
+    <!-- SECTION 2 — Peek Card Carousel -->
+    <section class="peek-section">
+        <div class="peek-viewport" id="peekViewport">
+            <div class="peek-track" id="peekTrack">
+                <article class="peek-slide">
+                    <img src="images/secondcarousel1.avif" alt="Slide 1" class="peek-bg">
+                    <div class="peek-overlay"></div>
+                    <div class="peek-content">
+                        <h2 class="peek-title">Cybertruck</h2>
+                        <p class="peek-subtitle">Starting at $30,350</p>
+                        <div class="peek-buttons">
+                            <a href="inventory.html" class="btn-primary">Order Now</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="peek-slide">
+                    <img src="images/secondcarousel2.avif" alt="Slide 2" class="peek-bg">
+                    <div class="peek-overlay"></div>
+                    <div class="peek-content">
+                        <h2 class="peek-title">Model 3</h2>
+                        <p class="peek-subtitle">From $38,990</p>
+                        <div class="peek-buttons">
+                            <a href="inventory.html" class="btn-primary">Order Now</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="peek-slide">
+                    <img src="images/secondcarousel3.avif" alt="Slide 3" class="peek-bg">
+                    <div class="peek-overlay"></div>
+                    <div class="peek-content">
+                        <h2 class="peek-title">Model Y</h2>
+                        <p class="peek-subtitle">0% APR Available</p>
+                        <div class="peek-buttons">
+                            <a href="inventory.html" class="btn-primary">Order Now</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="peek-slide">
+                    <img src="images/secondcarousel4.avif" alt="Slide 4" class="peek-bg">
+                    <div class="peek-overlay"></div>
+                    <div class="peek-content">
+                        <h2 class="peek-title">Model X</h2>
+                        <p class="peek-subtitle">From $29,990</p>
+                        <div class="peek-buttons">
+                            <a href="inventory.html" class="btn-primary">Order Now</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="peek-slide">
+                    <img src="images/secondcarousel5.avif" alt="Slide 5" class="peek-bg">
+                    <div class="peek-overlay"></div>
+                    <div class="peek-content">
+                        <h2 class="peek-title">Model S</h2>
+                        <p class="peek-subtitle">From $14,500</p>
+                        <div class="peek-buttons">
+                            <a href="inventory.html" class="btn-primary">Order Now</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <button class="peek-arrow peek-arrow--prev" id="peekPrev" aria-label="Previous">&#8249;</button>
+            <button class="peek-arrow peek-arrow--next" id="peekNext" aria-label="Next">&#8250;</button>
+        </div>
+        <div class="peek-dots" id="peekDots">
+            <span class="peek-dot active" data-index="0"></span>
+            <span class="peek-dot" data-index="1"></span>
+            <span class="peek-dot" data-index="2"></span>
+            <span class="peek-dot" data-index="3"></span>
+            <span class="peek-dot" data-index="4"></span>
+        </div>
+    </section>
+
+    <!-- SECTION 3 — Offers Grid -->
+    <section class="offers-section">
+        <div class="offer-card">
+            <div class="offer-text">
+                <h2 class="offer-title">Current Offers</h2>
+                <p class="offer-desc">Explore limited-time offers on Tesla vehicles.</p>
+                <a href="inventory.html" class="offer-btn">view inventory</a>
+            </div>
+            <div class="offer-image-wrap">
+                <img src="images/card1.avif" alt="Current Offers" class="offer-img">
+            </div>
+        </div>
+        <div class="offer-card">
+            <div class="offer-text">
+                <h2 class="offer-title">American Heroes</h2>
+                <p class="offer-desc">$500 off for military, first responders, healthcare, teachers and students.</p>
+                <a href="inventory.html" class="offer-btn">view inventory</a>
+            </div>
+            <div class="offer-image-wrap">
+                <img src="images/card2.avif" alt="American Heroes" class="offer-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4 — Feature Cards -->
+    <section class="feature-section">
+        <div class="feature-card feature-card--wide">
+            <img src="images/feature1.avif" alt="Full Self-Driving" class="feature-bg">
+            <div class="feature-overlay"></div>
+            <div class="feature-content">
+                <h2 class="feature-title">Travel Safer, Arrive Refreshed</h2>
+                <p class="feature-subtitle">Full Self-Driving (Supervised)</p>
+                <div class="feature-buttons">
+                    <a href="inventory.html" class="btn-primary">View Inventory</a>
+                </div>
+            </div>
+        </div>
+        <div class="feature-card feature-card--narrow">
+            <img src="images/feature2.avif" alt="Features That Come Standard" class="feature-bg">
+            <div class="feature-overlay"></div>
+            <div class="feature-content">
+                <h2 class="feature-title feature-title--large">Features That Come Standard</h2>
+                <div class="feature-buttons">
+                    <a href="investments.html" class="btn-primary">Discover</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5 — Tesla Investments -->
+    <section class="invest-section" id="investments">
+
+        <div class="invest-header">
+            <span class="invest-eyebrow">Financial Growth</span>
+            <h2 class="invest-heading">Tesla Investments</h2>
+            <p class="invest-subheading">
+                Don't have the funds for a Tesla today? Grow your wealth through our
+                investment platform and drive home your dream vehicle sooner than you think.
+            </p>
+        </div>
+
+        <div class="invest-grid">
+
+            <!-- LEFT CARD — Platform explainer -->
+            <div class="invest-card invest-card--info">
+                <div class="invest-card-top">
+                    <div class="invest-icon-wrap">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <circle cx="16" cy="16" r="15" stroke="#3d6ff8" stroke-width="2"/>
+                            <path d="M10 22 L16 10 L22 22" stroke="#3d6ff8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12.5 18 H19.5" stroke="#3d6ff8" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="invest-card-title">How It Works</h3>
+                    <p class="invest-card-desc">
+                        Our Tesla Investment Platform is designed to help you grow your
+                        money intelligently through professional trading strategies —
+                        so you can build the capital you need to purchase any Tesla vehicle,
+                        on your own timeline.
+                    </p>
+                </div>
+
+                <ol class="invest-steps">
+                    <li class="invest-step">
+                        <div class="step-number">01</div>
+                        <div class="step-body">
+                            <h4 class="step-title">Create Your Account</h4>
+                            <p class="step-desc">Sign up in minutes. Verify your identity and link your preferred payment method securely.</p>
+                        </div>
+                    </li>
+                    <li class="invest-step">
+                        <div class="step-number">02</div>
+                        <div class="step-body">
+                            <h4 class="step-title">Make a Deposit</h4>
+                            <p class="step-desc">Choose how much you want to invest. Start with as little as $100 — no large minimum required.</p>
+                        </div>
+                    </li>
+                    <li class="invest-step">
+                        <div class="step-number">03</div>
+                        <div class="step-body">
+                            <h4 class="step-title">We Trade, You Grow</h4>
+                            <p class="step-desc">Our platform deploys your funds across proven trading strategies — stocks, indices, and more — to grow your portfolio consistently.</p>
+                        </div>
+                    </li>
+                    <li class="invest-step">
+                        <div class="step-number">04</div>
+                        <div class="step-body">
+                            <h4 class="step-title">Withdraw Anytime</h4>
+                            <p class="step-desc">When you're ready, withdraw your earnings at any time with no lock-in period. Use the funds to order your Tesla directly from our inventory.</p>
+                        </div>
+                    </li>
+                </ol>
+
+                <div class="invest-stats">
+                    <div class="invest-stat">
+                        <span class="stat-value">12%<span class="stat-sup">+</span></span>
+                        <span class="stat-label">Avg. Monthly Return</span>
+                    </div>
+                    <div class="invest-stat-divider"></div>
+                    <div class="invest-stat">
+                        <span class="stat-value">$100</span>
+                        <span class="stat-label">Minimum Deposit</span>
+                    </div>
+                    <div class="invest-stat-divider"></div>
+                    <div class="invest-stat">
+                        <span class="stat-value">24/7</span>
+                        <span class="stat-label">Withdraw Anytime</span>
+                    </div>
+                </div>
+
+                <div class="invest-card-actions">
+                    <a href="auth.html" class="btn-primary">Start Investing</a>
+                    <a href="investments.html" class="invest-link">Learn More &rarr;</a>
+                </div>
+
+                <p class="invest-disclaimer">
+                    * Investment returns are not guaranteed. Past performance does not indicate future results.
+                    Always invest only what you can afford. See full risk disclosure on our investments page.
+                </p>
+            </div>
+
+            <!-- RIGHT CARD — TradingView TSLA chart -->
+            <div class="invest-card invest-card--chart">
+                <div class="chart-card-header">
+                    <div class="chart-label-wrap">
+                        <span class="chart-ticker">TSLA</span>
+                        <span class="chart-name">Tesla, Inc. — Live Stock</span>
+                    </div>
+                    <span class="chart-badge">NASDAQ</span>
+                </div>
+
+                <div class="tradingview-wrap">
+                    <!-- TradingView Widget BEGIN -->
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <div class="tradingview-widget-copyright">
+                            <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+                                <span class="blue-text">Track all markets on TradingView</span>
+                            </a>
+                        </div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async></script>
+                    </div>
+                    <!-- TradingView Widget END -->
+                </div>
+
+                <div class="chart-card-footer">
+                    <p class="chart-note">Chart powered by TradingView. Data delayed 15 min. Not financial advice.</p>
+                    <a href="https://www.tradingview.com/symbols/NASDAQ-TSLA/" target="_blank" rel="noopener" class="chart-external-link">View Full Chart &rarr;</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 6 — Tesla Supercharger Map -->
+    <section class="map-section">
+        <div class="map-header">
+            <div class="map-header-text">
+                <h2 class="map-heading">Find a Supercharger</h2>
+                <p class="map-subheading">Over 2,000 Supercharger stations across the US</p>
+            </div>
+            <div class="map-legend">
+                <span class="legend-dot legend-dot--supercharger"></span>
+                <span class="legend-label">Supercharger Station</span>
+                <span class="legend-dot legend-dot--destination" style="margin-left:16px"></span>
+                <span class="legend-label">Destination Charger</span>
+            </div>
+        </div>
+
+        <div class="map-wrap" id="mapWrap">
+            <div id="teslaMap"></div>
+            <button class="map-find-me" id="findMeBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"/>
+                    <line x1="12" y1="2" x2="12" y2="6"/>
+                    <line x1="12" y1="18" x2="12" y2="22"/>
+                    <line x1="2" y1="12" x2="6" y2="12"/>
+                    <line x1="18" y1="12" x2="22" y2="12"/>
+                </svg>
+                Find Me
+            </button>
+        </div>
+    </section>
+
+    <section class="charge-bar">
+        <div class="charge-bar-text">
+            <h2 class="charge-bar-title">Find Your Charge</h2>
+            <p class="charge-bar-desc">View the network of Tesla Superchargers and Destination Chargers available near you.</p>
+            <div class="charge-bar-buttons">
+                <a href="#" class="charge-btn-dark">View Network</a>
+                <a href="#" class="charge-btn-outline">Learn More</a>
+            </div>
+        </div>
+        <div class="charge-bar-stats">
+            <div class="charge-stat">
+                <div class="charge-stat-top">
+                    <span class="charge-stat-number">34,996</span>
+                    <span class="charge-stat-icon charge-stat-icon--red">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                            <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z"/>
+                        </svg>
+                    </span>
+                </div>
+                <span class="charge-stat-label">Superchargers</span>
+            </div>
+            <div class="charge-stat">
+                <div class="charge-stat-top">
+                    <span class="charge-stat-number">476</span>
+                    <span class="charge-stat-icon charge-stat-icon--grey">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                            <path d="M7 2v4H5v3a4 4 0 003 3.87V21h2v-8.13A4 4 0 0013 9V6h-2V2H7zm4 7H7V6h4v3z"/>
+                            <rect x="15" y="2" width="2" height="5" rx="1"/>
+                            <rect x="19" y="2" width="2" height="5" rx="1"/>
+                            <path d="M14 7h8v2a5 5 0 01-4 4.9V21h-2v-7.1A5 5 0 0112 9V7h2z"/>
+                        </svg>
+                    </span>
+                </div>
+                <span class="charge-stat-label">Destination<br>Chargers</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7 — 4-Image Peek Card Carousel -->
+    <section class="peek-card-carousel" id="peekCardCarousel">
+        <div class="pcc-viewport">
+            <div class="pcc-track" id="pccTrack">
+                <div class="pcc-slide">
+                    <img src="images/energy1.avif" alt="Energy 1" class="pcc-img">
+                    <div class="pcc-content">
+                        <h3 class="pcc-title">Solar Panels</h3>
+                        <p class="pcc-subtitle">Power Your Home and Reduce Your Electricity Bill</p>
+                        <a href="inventory.html" class="pcc-cta">View Inventory</a>
+                    </div>
+                </div>
+                <div class="pcc-slide">
+                    <img src="images/energy2.avif" alt="Energy 2" class="pcc-img">
+                    <div class="pcc-content">
+                        <h3 class="pcc-title">Powerwall</h3>
+                        <p class="pcc-subtitle">Keep Your Lights On During Outages</p>
+                        <a href="inventory.html" class="pcc-cta">View Inventory</a>
+                    </div>
+                </div>
+                <div class="pcc-slide">
+                    <img src="images/energy3.avif" alt="Energy 3" class="pcc-img">
+                    <div class="pcc-content">
+                        <h3 class="pcc-title">Megapack</h3>
+                        <p class="pcc-subtitle">Massive Batteries for Massive Energy Support</p>
+                        <a href="inventory.html" class="pcc-cta">View Inventory</a>
+                    </div>
+                </div>
+                <div class="pcc-slide">
+                    <img src="images/energy4.avif" alt="Energy 4" class="pcc-img">
+                    <div class="pcc-content">
+                        <h3 class="pcc-title">Solar Roof</h3>
+                        <p class="pcc-subtitle">Generate Clean Energy With Your Roof</p>
+                        <a href="inventory.html" class="pcc-cta">View Inventory</a>
+                    </div>
+                </div>
+            </div>
+            <button class="pcc-arrow pcc-prev" id="pccPrev" aria-label="Previous">&#8249;</button>
+            <button class="pcc-arrow pcc-next" id="pccNext" aria-label="Next">&#8250;</button>
+        </div>
+        <div class="pcc-dots" id="pccDots">
+            <button class="pcc-dot active" data-index="0" aria-label="Slide 1"></button>
+            <button class="pcc-dot" data-index="1" aria-label="Slide 2"></button>
+            <button class="pcc-dot" data-index="2" aria-label="Slide 3"></button>
+            <button class="pcc-dot" data-index="3" aria-label="Slide 4"></button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <a href="index.html">Home</a>
+                <a href="investments.html">Investments</a>
+                <a href="inventory.html">Inventory</a>
+            </div>
+            <div class="footer-center">
+                <span>© 2026 Tesla Investment</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Leaflet CSS + JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+    // ─── HAMBURGER NAV ───────────────────────────────────────────────
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', () => {
+  const isOpen = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', isOpen);
+  hamburger.setAttribute('aria-expanded', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  });
+});
+
+    // ─── HERO CAROUSEL ───────────────────────────────────────────────────────────
+    (function(){
+        const track=document.getElementById('carouselTrack'),dots=document.querySelectorAll('.dot'),prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn'),total=track.querySelectorAll('.carousel-slide').length;
+        let current=0,autoTimer;
+        function goTo(i){current=(i+total)%total;track.style.transform=`translateX(-${current*100}%)`;dots.forEach(d=>d.classList.remove('active'));dots[current].classList.add('active');}
+        function startAuto(){autoTimer=setInterval(()=>goTo(current+1),6000);}
+        function resetAuto(){clearInterval(autoTimer);startAuto();}
+        prevBtn.addEventListener('click',()=>{goTo(current-1);resetAuto();});
+        nextBtn.addEventListener('click',()=>{goTo(current+1);resetAuto();});
+        dots.forEach(d=>d.addEventListener('click',()=>{goTo(+d.dataset.index);resetAuto();}));
+        startAuto();
+        let tx=0;const el=document.getElementById('carousel');
+        el.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX;},{passive:true});
+        el.addEventListener('touchend',e=>{const diff=tx-e.changedTouches[0].clientX;if(Math.abs(diff)>40){goTo(diff>0?current+1:current-1);resetAuto();}},{passive:true});
+        const vid=document.querySelector('.carousel-video'),fb=document.querySelector('.video-fallback');
+        if(vid&&fb){vid.style.opacity='0';vid.addEventListener('loadeddata',()=>{vid.style.opacity='1';fb.style.opacity='0';});vid.addEventListener('error',()=>{vid.style.display='none';fb.style.opacity='1';});}
+    })();
+
+    // ─── PEEK CAROUSEL ───────────────────────────────────────────────────────────
+    (function(){
+        const track=document.getElementById('peekTrack'),viewport=document.getElementById('peekViewport'),dots=document.querySelectorAll('.peek-dot'),nextBtn=document.getElementById('peekNext'),prevBtn=document.getElementById('peekPrev'),slides=track.querySelectorAll('.peek-slide'),total=slides.length;
+        let current=0;
+        function getSlideWidth(){return slides[0].getBoundingClientRect().width;}
+        function getGap(){return parseInt(getComputedStyle(track).gap)||8;}
+        function goTo(i){current=Math.max(0,Math.min(i,total-1));track.style.transform=`translateX(-${current*(getSlideWidth()+getGap())}px)`;dots.forEach(d=>d.classList.remove('active'));dots[current].classList.add('active');prevBtn.classList.toggle('is-hidden',current===0);nextBtn.classList.toggle('is-hidden',current===total-1);}
+        nextBtn.addEventListener('click',()=>goTo(current+1));prevBtn.addEventListener('click',()=>goTo(current-1));
+        dots.forEach(d=>d.addEventListener('click',()=>goTo(+d.dataset.index)));
+        let tx=0;viewport.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX;},{passive:true});
+        viewport.addEventListener('touchend',e=>{const diff=tx-e.changedTouches[0].clientX;if(Math.abs(diff)>40)goTo(diff>0?current+1:current-1);},{passive:true});
+        window.addEventListener('resize',()=>goTo(current));goTo(0);
+    })();
+
+    // ─── SUPERCHARGER MAP ────────────────────────────────────────────────────────
+    (function () {
+        if (typeof L === 'undefined') { console.error('Leaflet library not loaded'); return; }
+        const map = L.map('teslaMap', { center: [39.5, -98.35], zoom: 4, zoomControl: true, scrollWheelZoom: true });
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd', maxZoom: 19
+        }).addTo(map);
+        function makeIcon(color) {
+            return L.divIcon({ className: '', html: `<div style="width:10px;height:10px;background:${color};border-radius:50%;border:2px solid rgba(255,255,255,0.85);box-shadow:0 1px 4px rgba(0,0,0,0.35);"></div>`, iconSize: [10,10], iconAnchor: [5,5] });
+        }
+        const superIcon = makeIcon('#e31937'), destinationIcon = makeIcon('#888');
+        const superchargers = [
+            [37.3861,-122.0839],[34.0522,-118.2437],[37.7749,-122.4194],[32.7157,-117.1611],
+            [38.5816,-121.4944],[36.7783,-119.4179],[33.8358,-117.9143],[37.9577,-121.2908],
+            [34.4208,-119.6982],[33.6846,-117.8265],[37.5485,-121.9886],[34.1478,-118.1445],
+            [37.3387,-121.8853],[36.3302,-119.2921],[33.4942,-117.1484],[38.4405,-122.7144],
+            [35.3733,-119.0187],[34.9592,-120.4358],[34.2694,-118.7815],[37.8044,-122.2711],
+            [33.9806,-118.4756],[34.4830,-117.3506],[37.9935,-122.0597],[38.9071,-121.0908],
+            [36.1699,-115.1398],[39.5296,-119.8138],[41.1545,-114.9960],[39.1638,-119.7674],
+            [33.4484,-112.0740],[32.2226,-110.9747],[35.1983,-111.6513],[34.8697,-111.7609],
+            [31.5457,-110.3477],[33.3942,-111.8497],[33.6054,-112.3193],
+            [45.5051,-122.6750],[44.0521,-123.0868],[42.3265,-122.8756],[45.8491,-119.4654],
+            [47.6062,-122.3321],[47.2529,-122.4443],[48.7519,-122.4787],[46.7298,-117.1817],
+            [47.9790,-122.2021],[48.2518,-116.5487],
+            [40.7608,-111.8910],[37.6775,-113.0619],[41.2230,-111.9738],[40.2338,-111.6585],
+            [38.3732,-111.5932],
+            [39.7392,-104.9903],[38.8339,-104.8214],[39.5501,-105.7821],[37.2753,-107.8801],
+            [40.4850,-106.8317],[37.9375,-107.0842],
+            [35.0844,-106.6504],[32.3199,-106.7637],[36.7279,-108.2085],
+            [30.2672,-97.7431],[29.7604,-95.3698],[32.7767,-96.7970],[29.4241,-98.4936],
+            [31.7619,-106.4850],[30.0860,-94.1018],[33.5779,-101.8552],[31.4638,-97.1914],
+            [27.8006,-97.3964],[30.6280,-96.3344],[28.7041,-100.4870],[29.8851,-97.9414],
+            [35.4676,-97.5164],[36.1540,-95.9928],[35.2220,-101.8313],
+            [46.5958,-112.0270],[45.7833,-108.5007],[48.1280,-114.3120],
+            [41.1400,-104.8202],[42.8666,-106.3131],[44.2619,-110.5585],
+            [43.6150,-116.2023],[46.0105,-116.1639],[42.5508,-114.4607],
+            [46.8772,-100.7677],[46.9218,-96.8094],
+            [44.0805,-103.2310],[43.5446,-96.7311],
+            [41.2565,-95.9345],[40.8136,-96.7026],[40.9264,-98.3420],
+            [39.0997,-94.5786],[37.6872,-97.3301],[38.8404,-99.3267],
+            [35.4676,-97.5164],[36.1540,-95.9928],[34.9029,-97.0748],
+            [44.9778,-93.2650],[46.7867,-92.1005],[44.0121,-92.4802],
+            [41.5868,-93.6250],[41.6611,-91.5302],[42.4975,-94.1680],
+            [38.6270,-90.1994],[39.0997,-94.5786],[37.2153,-93.2982],[38.9517,-92.3341],
+            [43.0389,-76.1422],[44.5133,-88.0133],[43.0731,-89.4012],[43.8500,-91.2396],
+            [41.8781,-87.6298],[39.7817,-89.6501],[40.1164,-88.2434],[42.2711,-89.0940],
+            [42.3314,-83.0458],[42.9634,-85.6681],[44.3148,-85.6024],[46.3417,-84.3421],
+            [39.7684,-86.1581],[41.5868,-87.0000],[40.4173,-86.8753],
+            [39.9612,-82.9988],[41.4993,-81.6944],[39.1031,-84.5120],[41.0814,-81.5190],[39.7589,-84.1916],
+            [38.2527,-85.7585],[37.8393,-84.2700],[38.0317,-84.4947],
+            [36.1627,-86.7816],[35.1495,-90.0490],[35.9606,-83.9207],[35.5175,-86.5804],
+            [32.2988,-90.1848],[34.3668,-89.5186],
+            [33.5207,-86.8025],[32.3668,-86.2999],[34.7304,-86.5861],
+            [33.7490,-84.3880],[32.0835,-81.0998],[33.9519,-83.3576],[30.8327,-83.2785],
+            [25.7617,-80.1918],[28.5383,-81.3792],[30.3322,-81.6557],[27.9506,-82.4572],
+            [26.7153,-80.0534],[30.4213,-84.2869],[27.3364,-82.5307],[26.1420,-80.1448],
+            [29.6516,-82.3248],[28.1776,-82.3510],
+            [32.7765,-79.9311],[34.0007,-81.0348],[35.1495,-82.1554],
+            [35.7796,-78.6382],[35.2271,-80.8431],[36.0726,-79.7920],[35.0527,-78.8784],
+            [37.5407,-77.4360],[36.7282,-76.6041],[38.8048,-77.0469],[37.2707,-76.7075],[38.0293,-78.4767],
+            [38.3498,-81.6326],[39.4329,-77.4194],
+            [39.2904,-76.6122],[38.9784,-77.0277],[38.4688,-76.9902],
+            [39.7447,-75.5484],
+            [39.9526,-75.1652],[40.4406,-79.9959],[41.2033,-77.1945],[40.6501,-75.3771],[41.4117,-75.6624],
+            [40.0583,-74.4057],[40.7357,-74.1724],[39.3643,-74.4229],
+            [40.7128,-74.0060],[42.6526,-73.7562],[43.0481,-76.1474],[41.2995,-73.9146],
+            [44.6995,-73.4529],[42.1497,-76.0173],
+            [41.7658,-72.6851],[41.3712,-72.9726],
+            [42.3601,-71.0589],[42.1015,-72.5898],[42.5584,-70.8831],
+            [44.2601,-72.5754],[43.2081,-71.5376],[44.8016,-68.7712],
+            [41.8240,-71.4128],
+            [32.7767,-96.7970],[35.6870,-105.9378],
+            [21.3069,-157.8583],[21.4389,-158.0001],
+            [61.2181,-149.9003],
+            [43.5448,-96.7311],[44.0805,-103.2310],[41.5868,-93.6250],
+            [38.5767,-92.1735],[37.9643,-87.5615],[30.4515,-91.1871],
+            [29.9511,-90.0715],[32.3668,-90.1848],[34.1478,-92.0032],
+            [36.3729,-94.2088],[35.3859,-94.3985],[36.3395,-97.8783]
+        ];
+        const destinations = [
+            [37.4419,-122.1430],[34.0689,-118.4452],[36.6002,-121.8947],
+            [45.5234,-122.6762],[47.6553,-122.3035],[40.6892,-74.0445],
+            [42.3467,-71.0972],[38.9072,-77.0369],[25.7617,-80.1999],
+            [39.9526,-75.1699],[33.7490,-84.3950],[32.7765,-79.9411],
+            [41.8781,-87.6350],[44.9778,-93.2700],[39.7684,-86.1631],
+            [29.7604,-95.3750],[30.2672,-97.7500],[32.7767,-96.8030],
+            [36.1627,-86.7870],[35.1495,-90.0540],[47.6062,-122.3380],
+            [39.7392,-104.9950],[35.4676,-97.5220],[43.0389,-76.1490]
+        ];
+        superchargers.forEach(([lat,lng])=>{ L.marker([lat,lng],{icon:superIcon}).addTo(map).bindPopup(`<b>Tesla Supercharger</b><br>${lat.toFixed(4)}, ${lng.toFixed(4)}`); });
+        destinations.forEach(([lat,lng])=>{ L.marker([lat,lng],{icon:destinationIcon}).addTo(map).bindPopup(`<b>Tesla Destination Charger</b><br>${lat.toFixed(4)}, ${lng.toFixed(4)}`); });
+        document.getElementById('findMeBtn').addEventListener('click', function () {
+            if (!navigator.geolocation) { alert('Geolocation is not supported by your browser.'); return; }
+            const btn = this;
+            btn.textContent = 'Locating…';
+            btn.disabled = true;
+            navigator.geolocation.getCurrentPosition(
+                function (pos) {
+                    const { latitude: lat, longitude: lng } = pos.coords;
+                    map.setView([lat, lng], 10);
+                    L.circleMarker([lat, lng], { radius:10, fillColor:'#3d6ff8', color:'#fff', weight:3, fillOpacity:1 }).addTo(map).bindPopup('<b>You are here</b>').openPopup();
+                    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg> Find Me`;
+                    btn.disabled = false;
+                },
+                function () {
+                    alert('Unable to retrieve your location. Please allow location access.');
+                    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg> Find Me`;
+                    btn.disabled = false;
+                }
+            );
+        });
+    })();
+
+    // ─── ENERGY CAROUSEL ─────────────────────────────────────────────────────────
+    (function(){
+        const track = document.getElementById('pccTrack');
+        if(!track) return;
+        const slides = track.querySelectorAll('.pcc-slide');
+        const prevBtn = document.getElementById('pccPrev');
+        const nextBtn = document.getElementById('pccNext');
+        const dots = document.querySelectorAll('.pcc-dot');
+        const total = slides.length;
+        let current = 0, autoTimer;
+        function goTo(i){ current=(i+total)%total; track.style.transform=`translateX(-${current*100}%)`; dots.forEach(d=>d.classList.remove('active')); dots[current].classList.add('active'); }
+        function startAuto(){ autoTimer=setInterval(()=>goTo(current+1),5000); }
+        function resetAuto(){ clearInterval(autoTimer); startAuto(); }
+        prevBtn.addEventListener('click',()=>{ goTo(current-1); resetAuto(); });
+        nextBtn.addEventListener('click',()=>{ goTo(current+1); resetAuto(); });
+        dots.forEach(d=>d.addEventListener('click',()=>{ goTo(+d.dataset.index); resetAuto(); }));
+        let tx=0; const vp=document.querySelector('.pcc-viewport');
+        vp.addEventListener('touchstart',e=>{ tx=e.changedTouches[0].clientX; },{passive:true});
+        vp.addEventListener('touchend',e=>{ const diff=tx-e.changedTouches[0].clientX; if(Math.abs(diff)>30){ goTo(diff>0?current+1:current-1); resetAuto(); } },{passive:true});
+        window.addEventListener('resize',()=>goTo(current));
+        goTo(0); startAuto();
+    })();
+    </script>
+
+
+<!-- ── FLOATING SUPPORT BUTTON ── -->
+<style>
+.float-support-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #e31937;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(227,25,55,0.45), 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+  text-decoration: none;
+}
+.float-support-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 8px 28px rgba(227,25,55,0.55), 0 4px 12px rgba(0,0,0,0.3);
+}
+.float-support-btn:active {
+  transform: scale(0.96);
+}
+.float-support-btn svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.float-support-tooltip {
+  position: fixed;
+  bottom: 94px;
+  right: 28px;
+  z-index: 9999;
+  background: rgba(10,13,20,0.92);
+  color: rgba(255,255,255,0.85);
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 7px 13px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.float-support-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background: rgba(10,13,20,0.92);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+.float-support-btn:hover + .float-support-tooltip,
+.float-support-btn:focus + .float-support-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Pulse ring animation */
+.float-support-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(227,25,55,0.5);
+  animation: supportPulse 2.4s ease-out infinite;
+}
+@keyframes supportPulse {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  70%  { transform: scale(1.6); opacity: 0;   }
+  100% { transform: scale(1.6); opacity: 0;   }
+}
+@media (max-width: 480px) {
+  .float-support-btn  { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+  .float-support-tooltip { bottom: 80px; right: 20px; }
+}
+</style>
+<a class="float-support-btn" href="support.html" aria-label="Customer Support Chat">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+</a>
+<div class="float-support-tooltip">Chat with Support</div>
+
+</body>
+</html>

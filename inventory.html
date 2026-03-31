@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tesla Inventory</title>
+<link rel="icon" type="image/svg+xml" href="images/Logo.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ──────────────────────────────────────
+   RESET
+────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f4f0;
+  --card: #ffffff;
+  --ink: #0f0f0f;
+  --muted: #7a7a72;
+  --accent: #cc2200;
+  --accent2: #1a3a5c;
+  --border: #e2e0d8;
+  --radius: 14px;
+  --nav-h: 56px;   /* ← single source of truth, matches index.css */
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ──────────────────────────────────────
+   NAVBAR  (white, sticky — exact match
+   to the screenshot & index.css)
+────────────────────────────────────── */
+.navbar {
+  background: #ffffff;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+}
+.logo { width: 100px; height: auto; }
+.navbar-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.navbar-logo svg {
+  width: 84px;
+  height: 18px;
+  fill: #000;
+}
+
+.navbar-links {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  gap: 0;
+}
+.navbar-links a {
+  display: block;
+  padding: 0 16px;
+  line-height: var(--nav-h);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #171a20;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+.navbar-links a:hover  { color: #5c5e62; }
+.navbar-links a.active { font-weight: 600; }
+
+.navbar-cta { flex-shrink: 0; }
+.navbar-cta a {
+  display: inline-block;
+  background: #1faacd;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 9px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s;
+}
+.navbar-cta a:hover { background: #198fb0; }
+
+/* Hamburger button */
+.hamburger {
+  display: none;          /* hidden on desktop */
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 5px;
+  border: none;
+  background: none;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #171a20;
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+  transform-origin: center;
+}
+/* ✕ animation */
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile slide-down menu */
+.mobile-menu {
+  display: none;            /* JS adds .open → display:flex */
+  flex-direction: column;
+  position: fixed;
+  top: var(--nav-h);        /* drops exactly under sticky navbar */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  z-index: 999;
+  padding: 10px 0 28px;
+  overflow-y: auto;
+  animation: mmIn 0.26s cubic-bezier(0.22,1,0.36,1);
+}
+.mobile-menu.open { display: flex; }
+
+@keyframes mmIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 15px 28px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #171a20;
+  text-decoration: none;
+  border-bottom: 1px solid #f3f3f3;
+  transition: background 0.15s;
+}
+.mobile-menu a:hover  { background: #f9f9f9; }
+.mobile-menu a.active { color: #1faacd; font-weight: 600; }
+
+.mobile-cta { margin: 18px 28px 0; }
+.mobile-cta a {
+  display: block;
+  background: #1faacd;
+  color: #fff;
+  border-radius: 4px;
+  text-align: center;
+  padding: 13px 22px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border-bottom: none;
+  transition: background 0.18s;
+}
+.mobile-cta a:hover { background: #198fb0; }
+
+/* Responsive breakpoint for navbar */
+@media (max-width: 768px) {
+  .navbar       { padding: 0 18px; }
+  .navbar-links { display: none; }
+  .navbar-cta   { display: none; }
+  .hamburger    { display: flex; }
+}
+
+/* ──────────────────────────────────────
+   HERO
+────────────────────────────────────── */
+.hero {
+  background: #0d1117;
+  padding: 56px 40px 48px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 65% -10%, rgba(204,34,0,0.16) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-inner  { position: relative; max-width: 1240px; margin: 0 auto; }
+.hero-eyebrow {
+  display: block;
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 12px;
+}
+.hero p {
+  color: rgba(255,255,255,0.46);
+  font-size: 0.92rem; line-height: 1.65; max-width: 460px;
+}
+@media (max-width: 600px) { .hero { padding: 38px 18px 32px; } }
+
+/* ──────────────────────────────────────
+   CONTROLS BAR
+   top: var(--nav-h) keeps it flush
+   right under the sticky navbar
+────────────────────────────────────── */
+.controls {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 13px 32px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 90;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.search-wrap {
+  position: relative; flex: 1;
+  min-width: 160px; max-width: 320px;
+}
+.search-wrap svg {
+  position: absolute; left: 11px; top: 50%;
+  transform: translateY(-50%); color: var(--muted); pointer-events: none;
+}
+.search-input {
+  width: 100%; padding: 9px 12px 9px 34px;
+  border: 1.5px solid var(--border); border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.86rem; color: var(--ink);
+  background: var(--bg); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input:focus {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 3px rgba(26,58,92,0.08); background: #fff;
+}
+.search-input::placeholder { color: var(--muted); }
+
+.filter-tabs { display: flex; gap: 5px; flex-wrap: wrap; }
+.filter-tab {
+  padding: 8px 15px;
+  border: 1.5px solid var(--border); border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600;
+  color: var(--muted); background: var(--bg); cursor: pointer;
+  transition: all 0.18s; white-space: nowrap;
+}
+.filter-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.filter-tab:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
+
+.results-info { margin-left: auto; font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .controls { padding: 10px 14px; gap: 8px; }
+  .results-info { display: none; }
+  .filter-tab { padding: 7px 11px; font-size: 0.76rem; }
+}
+
+/* ──────────────────────────────────────
+   PRODUCT GRID
+────────────────────────────────────── */
+.grid-wrap { padding: 28px 32px 64px; max-width: 1280px; margin: 0 auto; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 20px;
+}
+@media (max-width: 600px) {
+  .grid-wrap { padding: 18px 14px 48px; }
+  .grid      { grid-template-columns: 1fr; gap: 14px; }
+}
+
+/* ──────────────────────────────────────
+   CARD
+────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: box-shadow 0.28s, transform 0.22s, border-color 0.22s;
+}
+.card:hover {
+  box-shadow: 0 10px 36px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+  border-color: rgba(204,34,0,0.16);
+}
+.card-img-wrap { overflow: hidden; position: relative; }
+.card-img {
+  width: 100%; height: 200px; object-fit: cover; display: block;
+  background: #e0ddd6; transition: transform 0.5s ease;
+}
+.card:hover .card-img { transform: scale(1.05); }
+
+.card-badge {
+  position: absolute; top: 12px; left: 12px;
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.badge-vehicles { background: var(--accent); color: #fff; }
+.badge-energy   { background: #14532d; color: #fff; }
+.badge-charging { background: var(--accent2); color: #fff; }
+
+.avail-badge {
+  position: absolute; top: 12px; right: 12px;
+  padding: 3px 9px; border-radius: 20px; font-size: 0.6rem; font-weight: 700;
+}
+.avail-in      { background: #dcfce7; color: #15803d; }
+.avail-order   { background: #dbeafe; color: #1d4ed8; }
+.avail-limited { background: #fef2f2; color: #dc2626; }
+
+.card-body {
+  padding: 15px 18px 18px;
+  display: flex; flex-direction: column; gap: 6px; flex: 1;
+}
+.card-cat {
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted);
+}
+.card-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem; color: var(--ink); line-height: 1.2;
+}
+.card-desc {
+  font-size: 0.79rem; color: var(--muted); line-height: 1.6; flex: 1;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card-price  { font-size: 1.15rem; font-weight: 600; color: var(--ink); padding-top: 4px; }
+.card-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+.btn-primary {
+  flex: 1; padding: 10px;
+  background: var(--ink); color: #fff; border: none; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s, transform 0.15s;
+}
+.btn-primary:hover { background: #2a2a2a; transform: translateY(-1px); }
+
+.btn-outline {
+  padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600;
+  color: var(--ink); background: none; cursor: pointer; transition: all 0.18s;
+}
+.btn-outline:hover { border-color: var(--ink); background: var(--bg); }
+
+.empty {
+  grid-column: 1/-1; text-align: center; padding: 72px 24px; color: var(--muted);
+}
+.empty-icon { font-size: 3rem; margin-bottom: 14px; }
+.empty h3   { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--ink); margin-bottom: 8px; }
+.empty p    { font-size: 0.86rem; line-height: 1.6; }
+
+/* ──────────────────────────────────────
+   DETAIL MODAL
+────────────────────────────────────── */
+.overlay {
+  position: fixed; inset: 0; z-index: 800;
+  background: rgba(8,8,12,0.72); backdrop-filter: blur(7px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+.overlay.open { opacity: 1; visibility: visible; }
+
+.modal {
+  background: var(--card); border-radius: 18px;
+  width: 100%; max-width: 880px; max-height: 90vh;
+  overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+  transform: translateY(24px) scale(0.97);
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+.overlay.open .modal { transform: translateY(0) scale(1); }
+
+.modal-inner { display: grid; grid-template-columns: 1.05fr 1fr; overflow: hidden; flex: 1; min-height: 0; }
+
+.modal-gallery { background: #111; display: flex; flex-direction: column; position: relative; }
+.modal-main-img {
+  flex: 1; width: 100%; object-fit: cover; display: block;
+  min-height: 300px; max-height: 450px; transition: opacity 0.25s;
+}
+.modal-main-img.fade { opacity: 0; }
+
+.modal-img-counter {
+  position: absolute; bottom: 56px; right: 10px;
+  background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.85);
+  font-size: 0.64rem; font-weight: 600; padding: 3px 8px; border-radius: 20px;
+}
+.modal-thumbs {
+  display: flex; gap: 5px; padding: 7px 9px;
+  background: rgba(0,0,0,0.65); overflow-x: auto;
+  min-height: 52px; align-items: center;
+}
+.modal-thumbs::-webkit-scrollbar { height: 3px; }
+.modal-thumbs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+.modal-thumb {
+  width: 46px; height: 33px; border-radius: 5px; overflow: hidden;
+  cursor: pointer; border: 2px solid transparent; opacity: 0.42; flex-shrink: 0;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.modal-thumb.active { border-color: #fff; opacity: 1; }
+.modal-thumb:hover:not(.active) { opacity: 0.78; }
+.modal-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.modal-close {
+  position: absolute; top: 11px; right: 11px; z-index: 10;
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.45); color: #fff; font-size: 0.9rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.18s;
+}
+.modal-close:hover { background: rgba(0,0,0,0.7); }
+
+.modal-details {
+  padding: 22px 22px 18px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.modal-details::-webkit-scrollbar { width: 4px; }
+.modal-details::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.modal-cat  {
+  font-size: 0.63rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+}
+.modal-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem; line-height: 1.1; letter-spacing: -0.02em; color: var(--ink);
+}
+.modal-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+.modal-price-block {
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 11px 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.modal-price { font-size: 1.4rem; font-weight: 600; color: var(--ink); }
+.modal-avail {
+  font-size: 0.68rem; font-weight: 700;
+  padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+}
+.modal-specs { border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+.spec-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 13px; border-bottom: 1px solid var(--border);
+  font-size: 0.8rem; gap: 12px;
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-key { color: var(--muted); flex-shrink: 0; }
+.spec-val  { font-weight: 600; color: var(--ink); text-align: right; }
+
+.modal-actions { display: flex; gap: 9px; margin-top: 2px; }
+.modal-order-btn {
+  flex: 1; padding: 12px;
+  background: var(--accent); color: #fff; border: none; border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.87rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s, transform 0.15s;
+}
+.modal-order-btn:hover { background: #aa1a00; transform: translateY(-1px); }
+
+.modal-save-btn {
+  padding: 12px 15px;
+  border: 1.5px solid var(--border); border-radius: 9px;
+  background: none; font-family: 'DM Sans', sans-serif;
+  font-size: 0.87rem; font-weight: 600; color: var(--ink);
+  cursor: pointer; transition: all 0.18s;
+}
+.modal-save-btn:hover { border-color: var(--ink); background: var(--bg); }
+.modal-save-btn.saved { border-color: var(--accent); color: var(--accent); background: #fff5f3; }
+
+/* Mobile: modal slides up from bottom */
+@media (max-width: 700px) {
+  .overlay     { padding: 0; align-items: flex-end; }
+  .modal       { border-radius: 16px 16px 0 0; max-height: 95vh; }
+  .modal-inner { grid-template-columns: 1fr; }
+  .modal-main-img { min-height: 200px; max-height: 240px; }
+  .modal-details  { padding: 15px 15px 18px; }
+}
+
+/* ──────────────────────────────────────
+   ORDER MODAL
+────────────────────────────────────── */
+.order-overlay {
+  position: fixed; inset: 0; z-index: 900;
+  background: rgba(8,8,12,0.82); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+.order-overlay.open { opacity: 1; visibility: visible; }
+
+.order-modal {
+  background: var(--card); border-radius: 20px;
+  width: 100%; max-width: 430px; max-height: 92vh; overflow-y: auto;
+  padding: 32px 28px 26px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.45);
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  display: flex; flex-direction: column; gap: 14px; position: relative;
+}
+.order-overlay.open .order-modal { transform: translateY(0) scale(1); }
+
+.step-dots { display: flex; gap: 6px; align-items: center; }
+.step-dot  {
+  width: 8px; height: 8px; border-radius: 4px;
+  background: var(--border); transition: background 0.25s, width 0.25s;
+}
+.step-dot.current { width: 22px; background: var(--accent); }
+.step-dot.done    { background: #15803d; }
+
+.step-lbl {
+  font-size: 0.66rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+}
+.order-step { display: none; flex-direction: column; gap: 13px; }
+.order-step.active { display: flex; }
+
+.order-thumb {
+  width: 100%; height: 170px; object-fit: cover;
+  border-radius: 10px; background: #e0ddd6; display: block;
+}
+.order-prod-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem; letter-spacing: -0.01em; color: var(--ink);
+}
+.order-prod-meta  { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+.order-prod-price { font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+
+.color-label { font-size: 0.76rem; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
+.color-pick  { display: flex; gap: 8px; flex-wrap: wrap; }
+.color-dot {
+  width: 25px; height: 25px; border-radius: 50%;
+  cursor: pointer; border: 2.5px solid transparent;
+  transition: border-color 0.18s, transform 0.15s; position: relative;
+}
+.color-dot:hover { transform: scale(1.12); }
+.color-dot.selected { border-color: var(--accent); }
+.color-dot::after {
+  content: attr(data-name);
+  position: absolute; bottom: -17px; left: 50%; transform: translateX(-50%);
+  font-size: 0.54rem; color: var(--muted); white-space: nowrap;
+  opacity: 0; transition: opacity 0.15s; pointer-events: none;
+}
+.color-dot:hover::after { opacity: 1; }
+
+.form-group  { display: flex; flex-direction: column; gap: 4px; }
+.form-label  { font-size: 0.76rem; font-weight: 600; color: var(--ink); }
+.form-input, .form-select {
+  width: 100%; padding: 10px 11px;
+  border: 1.5px solid var(--border); border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--ink);
+  background: var(--bg); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-input:focus, .form-select:focus {
+  border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(26,58,92,0.08); background: #fff;
+}
+.form-input.invalid { border-color: var(--accent); }
+.form-select { appearance: none; cursor: pointer; }
+.form-row    { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.field-err   { font-size: 0.69rem; color: var(--accent); display: none; }
+
+.success-icon {
+  width: 58px; height: 58px; background: #dcfce7; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.65rem; margin: 0 auto;
+}
+.success-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem; text-align: center; color: var(--ink); letter-spacing: -0.02em;
+}
+.success-ref {
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 9px; padding: 10px 14px; text-align: center;
+  font-size: 0.77rem; color: var(--muted);
+}
+.success-ref strong { display: block; font-size: 0.95rem; color: var(--ink); margin-top: 3px; letter-spacing: 0.05em; }
+.success-email {
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 9px; padding: 9px 14px;
+  font-size: 0.77rem; color: var(--muted); text-align: center;
+}
+
+.order-btn { width: 100%; padding: 12px; border: none; border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.order-btn-red   { background: var(--accent); color: #fff; }
+.order-btn-red:hover   { background: #aa1a00; transform: translateY(-1px); }
+.order-btn-ghost { background: var(--bg); color: var(--ink); border: 1.5px solid var(--border); }
+.order-btn-ghost:hover { border-color: var(--ink); background: #eeecea; }
+.order-btn-dark  { background: var(--ink); color: #fff; }
+.order-btn-dark:hover  { background: #2a2a2a; }
+
+.order-modal-x {
+  position: absolute; top: 13px; right: 13px;
+  width: 27px; height: 27px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: var(--bg);
+  color: var(--muted); font-size: 0.8rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.18s;
+}
+.order-modal-x:hover { border-color: var(--ink); color: var(--ink); }
+
+@media (max-width: 600px) {
+  .order-overlay { padding: 0; align-items: flex-end; }
+  .order-modal   { border-radius: 16px 16px 0 0; padding: 24px 16px 20px; max-width: 100%; }
+  .form-row      { grid-template-columns: 1fr; }
+}
+
+/* ──────────────────────────────────────
+   CRYPTO PAYMENT STEP
+────────────────────────────────────── */
+.pay-coin-tabs { display: flex; gap: 8px; }
+.pay-coin-tab {
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 16px; border-radius: 10px;
+  border: 1.5px solid var(--border); background: var(--bg);
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600;
+  color: var(--muted); cursor: pointer; transition: all 0.18s; flex: 1;
+  justify-content: center;
+}
+.pay-coin-tab:hover { border-color: #9ca3af; color: var(--ink); }
+.pay-coin-tab.active { background: #0d1117; border-color: transparent; color: #fff; box-shadow: 0 4px 14px rgba(13,17,23,0.22); }
+.pay-coin-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; flex-shrink: 0;
+  transition: background 0.18s, color 0.18s;
+}
+.pay-coin-tab[data-coin="btc"] .pay-coin-icon { background: rgba(247,147,26,0.14); color: #F7931A; }
+.pay-coin-tab[data-coin="btc"].active .pay-coin-icon { background: #F7931A; color: #fff; }
+.pay-coin-tab[data-coin="eth"] .pay-coin-icon { background: rgba(98,126,234,0.14); color: #627EEA; }
+.pay-coin-tab[data-coin="eth"].active .pay-coin-icon { background: #627EEA; color: #fff; }
+
+.pay-card {
+  background: #fafaf8; border: 1.5px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.pay-card-header {
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+}
+.pay-card-badge {
+  width: 38px; height: 38px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 800; flex-shrink: 0;
+}
+.pay-card-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+
+.pay-notice {
+  padding: 11px 14px; border-radius: 10px; border-left: 3px solid;
+  display: flex; align-items: flex-start; gap: 9px;
+  font-size: 0.78rem; line-height: 1.55;
+}
+.pay-notice svg { flex-shrink: 0; margin-top: 1px; }
+
+.pay-wallet-label {
+  font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px;
+}
+.pay-wallet-row { display: flex; gap: 12px; align-items: flex-start; }
+.pay-wallet-col { flex: 1; min-width: 0; }
+.pay-wallet-box {
+  background: #fff; border: 1.5px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+}
+.pay-wallet-network {
+  padding: 8px 13px 0;
+  font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.pay-wallet-addr-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 8px 8px 13px;
+}
+.pay-wallet-addr {
+  flex: 1; font-size: 0.72rem; font-weight: 500; color: var(--ink);
+  font-family: 'Courier New', monospace; word-break: break-all;
+  line-height: 1.5; letter-spacing: 0.03em;
+}
+.pay-copy-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 13px; border-radius: 8px; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 700;
+  cursor: pointer; transition: all 0.18s; flex-shrink: 0; white-space: nowrap;
+}
+.pay-copy-btn.copied { background: #dcfce7 !important; color: #16a34a !important; }
+
+.pay-qr {
+  width: 100px; height: 100px; border-radius: 10px;
+  border: 1.5px solid var(--border); background: #fff;
+  overflow: hidden; padding: 3px; flex-shrink: 0;
+}
+.pay-qr img { width: 100%; height: 100%; object-fit: contain; border-radius: 7px; }
+
+.pay-amount-wrap { position: relative; display: flex; align-items: center; }
+.pay-amount-prefix {
+  position: absolute; left: 13px;
+  font-size: 15px; font-weight: 600; color: var(--muted); pointer-events: none;
+}
+.pay-amount-input {
+  width: 100%; padding: 12px 13px 12px 28px;
+  background: #fff; border: 1.5px solid var(--border); border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600; color: var(--ink);
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none; -moz-appearance: textfield;
+}
+.pay-amount-input::-webkit-outer-spin-button,
+.pay-amount-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.pay-amount-input::placeholder { color: #c4c9d2; font-weight: 400; }
+.pay-amount-input:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(26,58,92,0.08); }
+.pay-amount-hint { font-size: 0.7rem; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-top: 5px; }
+
+.pay-upload-zone {
+  border: 2px dashed var(--border); border-radius: 10px;
+  padding: 20px 16px; text-align: center; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s; position: relative; overflow: hidden;
+}
+.pay-upload-zone:hover { border-color: var(--accent); background: rgba(204,34,0,0.02); }
+.pay-upload-zone.has-file { border-color: #16a34a; background: rgba(22,163,74,0.03); }
+.pay-upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.pay-upload-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: #f0eeea; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px; transition: background 0.2s;
+}
+.pay-upload-zone:hover .pay-upload-icon { background: rgba(204,34,0,0.09); }
+.pay-upload-zone:hover .pay-upload-icon svg { color: var(--accent); }
+.pay-upload-icon svg { width: 18px; height: 18px; color: var(--muted); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: color 0.2s; }
+
+.pay-submit-btn {
+  width: 100%; padding: 13px; border-radius: 10px; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 700;
+  color: white; cursor: pointer; transition: all 0.18s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     NAVBAR
+════════════════════════════════════ -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo" aria-label="Tesla">
+    <img src="images/tesla logo.png" class="logo" alt="logo">
+  </a>
+
+  <ul class="navbar-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="investments.html">Investments</a></li>
+    <li><a href="inventory.html" class="active">Inventory</a></li>
+  </ul>
+
+  <div class="navbar-cta">
+    <a href="auth.html">Get started</a>
+  </div>
+
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE DROPDOWN -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="investments.html">Investments</a>
+  <a href="inventory.html" class="active">Inventory</a>
+  <div class="mobile-cta">
+    <a href="auth.html">Get started</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-eyebrow">Browse &amp; Order</span>
+    <h1>Tesla Inventory</h1>
+    <p>Find your perfect Tesla — vehicles, energy, and charging solutions, all in one place. Ready for delivery.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     CONTROLS
+════════════════════════════════════ -->
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search by name or keyword…">
+  </div>
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-cat="all">All (14)</button>
+    <button class="filter-tab" data-cat="vehicles">🚗 Vehicles (5)</button>
+    <button class="filter-tab" data-cat="energy">⚡ Energy (4)</button>
+  </div>
+  <span class="results-info" id="resultsInfo">14 results</span>
+</div>
+
+<!-- ════════════════════════════════════
+     GRID
+════════════════════════════════════ -->
+<div class="grid-wrap">
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- ════════════════════════════════════
+     DETAIL MODAL
+════════════════════════════════════ -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-inner">
+      <div class="modal-gallery">
+        <button class="modal-close" id="modalClose">✕</button>
+        <img id="modalMainImg" src="" alt="" class="modal-main-img">
+        <div class="modal-img-counter" id="modalCounter" style="display:none"></div>
+        <div class="modal-thumbs" id="modalThumbs"></div>
+      </div>
+      <div class="modal-details">
+        <div>
+          <div class="modal-cat" id="mCat"></div>
+          <div class="modal-name" id="mName"></div>
+        </div>
+        <p class="modal-desc" id="mDesc"></p>
+        <div class="modal-price-block">
+          <div class="modal-price" id="mPrice"></div>
+          <span class="modal-avail" id="mAvail"></span>
+        </div>
+        <div class="modal-specs" id="mSpecs"></div>
+        <div class="modal-actions">
+          <button class="modal-order-btn" id="modalOrderBtn">Order Now</button>
+          <button class="modal-save-btn" id="modalSaveBtn">♡ Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     ORDER MODAL
+════════════════════════════════════ -->
+<div class="order-overlay" id="orderOverlay">
+  <div class="order-modal">
+    <button class="order-modal-x" id="orderClose">✕</button>
+
+    <!-- Step 1 -->
+    <div class="order-step active" id="ostep1">
+      <div>
+        <div class="step-dots">
+          <div class="step-dot current"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div class="step-lbl" style="margin-top:7px">Step 1 of 4 — Confirm product</div>
+      </div>
+      <img id="oImg" src="" alt="" class="order-thumb">
+      <div>
+        <div class="order-prod-name" id="oName"></div>
+        <div class="order-prod-meta">
+          <div class="order-prod-price" id="oPrice"></div>
+          <span class="modal-avail" id="oAvail"></span>
+        </div>
+      </div>
+      <div id="oColorWrap" style="display:none">
+        <div class="color-label">Choose Color</div>
+        <div class="color-pick" id="oColors"></div>
+      </div>
+      <button class="order-btn order-btn-red" onclick="goOrderStep(2)">Continue →</button>
+      <button class="order-btn order-btn-ghost" onclick="closeOrder()">Cancel</button>
+    </div>
+
+    <!-- Step 2 — Crypto Payment -->
+    <div class="order-step" id="ostep2">
+      <div>
+        <div class="step-dots">
+          <div class="step-dot done"></div>
+          <div class="step-dot current"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div class="step-lbl" style="margin-top:7px">Step 2 of 4 — Pay with Crypto</div>
+      </div>
+
+      <!-- Coin tabs -->
+      <div class="pay-coin-tabs">
+        <button class="pay-coin-tab active" data-coin="btc" onclick="selectPayCoin('btc')">
+          <span class="pay-coin-icon">₿</span>Bitcoin
+        </button>
+        <button class="pay-coin-tab" data-coin="eth" onclick="selectPayCoin('eth')">
+          <span class="pay-coin-icon">Ξ</span>Ethereum
+        </button>
+      </div>
+
+      <!-- Pay card (rendered by JS) -->
+      <div class="pay-card" id="payCard">
+        <div class="pay-card-header" id="payCardHeader"></div>
+        <div class="pay-card-body">
+          <div class="pay-notice" id="payNotice"></div>
+
+          <!-- Wallet address + QR -->
+          <div>
+            <div class="pay-wallet-label">Send Payment To</div>
+            <div class="pay-wallet-row">
+              <div class="pay-wallet-col">
+                <div class="pay-wallet-box">
+                  <div class="pay-wallet-network" id="payNetworkLabel">BTC Network</div>
+                  <div class="pay-wallet-addr-row">
+                    <span class="pay-wallet-addr" id="payWalletAddr">bc1qdcrr2d8mplk7zjmhhnnq66upcxdxfnjz84n2dq</span>
+                    <button class="pay-copy-btn" id="payCopyBtn" onclick="copyPayAddress()">
+                      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="pay-qr" id="payQrBox"></div>
+            </div>
+          </div>
+
+          <!-- Amount input -->
+          <div>
+            <div class="pay-wallet-label">Amount (USD)</div>
+            <div class="pay-amount-wrap">
+              <span class="pay-amount-prefix">$</span>
+              <input type="number" id="payAmount" class="pay-amount-input" placeholder="0.00" min="0" step="0.01">
+            </div>
+            <div class="pay-amount-hint" id="payMinHint">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Enter the exact product price
+            </div>
+          </div>
+
+          <!-- Receipt upload -->
+          <div>
+            <div class="pay-wallet-label">Upload Payment Receipt</div>
+            <div class="pay-upload-zone" id="payUploadZone">
+              <input type="file" id="payReceiptFile" accept="image/*,.pdf" onchange="handlePayUpload(this)">
+              <div id="payUploadContent">
+                <div class="pay-upload-icon">
+                  <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <p style="font-size:0.8rem;font-weight:600;color:#374151;margin-bottom:3px;">Upload Payment Screenshot</p>
+                <p style="font-size:0.72rem;color:var(--muted);">JPG, PNG or PDF — click to browse</p>
+              </div>
+            </div>
+          </div>
+
+          <button class="pay-submit-btn" id="paySubmitBtn" onclick="submitPayment()">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Payment Confirmed — Continue
+          </button>
+        </div>
+      </div>
+
+      <button class="order-btn order-btn-ghost" onclick="goOrderStep(1)" style="margin-top:2px">← Back</button>
+    </div>
+
+    <!-- Step 3 — Delivery Details -->
+    <div class="order-step" id="ostep3">
+      <div>
+        <div class="step-dots">
+          <div class="step-dot done"></div>
+          <div class="step-dot done"></div>
+          <div class="step-dot current"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div class="step-lbl" style="margin-top:7px">Step 3 of 4 — Delivery details</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Full Name *</label>
+        <input type="text" class="form-input" id="fName" placeholder="e.g. John Doe">
+        <span class="field-err" id="errName">Please enter your full name.</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input type="email" class="form-input" id="fEmail" placeholder="you@example.com">
+        <span class="field-err" id="errEmail">Please enter a valid email address.</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number *</label>
+        <input type="tel" class="form-input" id="fPhone" placeholder="+1 (555) 000-0000">
+        <span class="field-err" id="errPhone">Please enter your phone number.</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Home Address *</label>
+        <input type="text" class="form-input" id="fAddress" placeholder="123 Main St, Apt 4B">
+        <span class="field-err" id="errAddress">Please enter your home address.</span>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">State *</label>
+          <select class="form-select" id="fState">
+            <option value="">Select…</option>
+            <option>Alabama</option><option>Alaska</option><option>Arizona</option>
+            <option>California</option><option>Colorado</option><option>Connecticut</option>
+            <option>Florida</option><option>Georgia</option><option>Hawaii</option>
+            <option>Illinois</option><option>Michigan</option><option>Nevada</option>
+            <option>New York</option><option>North Carolina</option><option>Ohio</option>
+            <option>Oregon</option><option>Pennsylvania</option><option>Texas</option>
+            <option>Virginia</option><option>Washington</option><option>Other</option>
+          </select>
+          <span class="field-err" id="errState">Please select your state.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Zip Code *</label>
+          <input type="text" class="form-input" id="fZip" placeholder="90210" maxlength="5">
+          <span class="field-err" id="errZip">Enter a 5-digit zip code.</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Delivery Preference</label>
+        <select class="form-select" id="fDelivery">
+          <option>Home Delivery</option>
+          <option>Pick up at Tesla Center</option>
+        </select>
+      </div>
+      <button class="order-btn order-btn-red" onclick="validateAndSubmit()">Place Order →</button>
+      <button class="order-btn order-btn-ghost" onclick="goOrderStep(2)">← Back</button>
+    </div>
+
+    <!-- Step 4 — Success -->
+    <div class="order-step" id="ostep4">
+      <div>
+        <div class="step-dots">
+          <div class="step-dot done"></div>
+          <div class="step-dot done"></div>
+          <div class="step-dot done"></div>
+          <div class="step-dot current"></div>
+        </div>
+      </div>
+      <div class="success-icon">✓</div>
+      <div class="success-title">Order Confirmed!</div>
+      <p style="font-size:0.82rem;color:var(--muted);text-align:center;line-height:1.65">
+        Payment received. A Tesla representative will reach out within 24 hours to finalise your order and arrange delivery.
+      </p>
+      <div class="success-ref">Order Reference<strong id="oRef"></strong></div>
+      <div class="success-email">📧 Confirmation sent to <strong id="oConfirmEmail" style="color:var(--ink)"></strong></div>
+      <button class="order-btn order-btn-dark" onclick="closeOrder()">Done</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════
+   HAMBURGER — ONE handler, no duplicates
+════════════════════════════════════ */
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+
+// Close when any link inside the menu is tapped
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ════════════════════════════════════
+   DATA
+════════════════════════════════════ */
+const items = [
+  // VEHICLES
+  { id:1, cat:'vehicles', name:'Model 3',
+    desc:'The benchmark electric sedan. 390 miles of range, all-wheel drive, and an immersive 15" touchscreen. Standard Autopilot included.',
+    price:'$38,990', availability:'In Stock',
+    images:['images/Model-3-Premium-Distance-Desktop.avif', 'images/Model-3-Performance-Hero-Desktop-EMEA.avif', 'images/model3 ss.png'],
+    colors:[{name:'Pearl White',hex:'#f0eeea',border:true},{name:'Midnight Black',hex:'#111'},{name:'Deep Blue',hex:'#2c4a7c'},{name:'Ultra Red',hex:'#a4191b'},{name:'Quicksilver',hex:'#9ca3af'}],
+    specs:[['Range','390 mi'],['0–60 mph','4.2 sec'],['Top Speed','145 mph'],['Drivetrain','Dual Motor AWD'],['Horsepower','346 hp']] },
+  { id:2, cat:'vehicles', name:'Model Y',
+    desc:'SUV meets supercar. 456 hp, lowered sport suspension, and carbon fiber spoiler. Track-ready from the factory.',
+    price:'$28,720', availability:'Limited',
+    images:['images/Model-Y-Premium-Hero-Desktop-NA.avif', 'images/Model-Y-Promo-Desktop-US-Snow.avif', 'images/Model-Y-Standard-Game-Desktop.avif'],
+    colors:[{name:'Ultra Red',hex:'#a4191b'},{name:'Midnight Black',hex:'#111'},{name:'Pearl White',hex:'#f0eeea',border:true},{name:'Quicksilver',hex:'#9ca3af'}],
+    specs:[['Range','285 mi'],['0–60 mph','3.5 sec'],['Top Speed','155 mph'],['Drivetrain','Dual Motor AWD'],['Horsepower','456 hp']] },
+  { id:3, cat:'vehicles', name:'Model X',
+    desc:'Tri-motor insanity. 1,020 hp, Falcon Wing doors, 7-passenger seating. The quickest production SUV ever built.',
+    price:'$29,990', availability:'Order Now',
+    images:['images/Model-X-New-Performance-Desktop-NA.avif', 'images/Model-X-Hero-Desktop-US.avif', 'images/Model-X-New-Interior-Desktop-NA.avif'],
+    colors:[{name:'Pearl White',hex:'#f0eeea',border:true},{name:'Midnight Black',hex:'#111'},{name:'Deep Blue',hex:'#2c4a7c'},{name:'Ultra Red',hex:'#a4191b'}],
+    specs:[['Range','326 mi'],['0–60 mph','2.5 sec'],['Top Speed','163 mph'],['Drivetrain','Tri-Motor AWD'],['Seating','7 passengers']] },
+  { id:4, cat:'vehicles', name:'Model S',
+    desc:'405 miles of range — more than any other EV. 17" cinematic display and 22-speaker audio system.',
+    price:'$14,500', availability:'In Stock',
+    images:['images/Model-S-Hero-Desktop-US-v2.avif', 'images/Model-S-New-Interior-Utility-Carousel-Slide-1-Desktop-NA.avif', 'images/Model-S-New-Interior-Desktop-NA.avif'],
+    colors:[{name:'Pearl White',hex:'#f0eeea',border:true},{name:'Midnight Black',hex:'#111'},{name:'Midnight Silver',hex:'#7c8490'},{name:'Ultra Red',hex:'#a4191b'}],
+    specs:[['Range','405 mi'],['0–60 mph','3.1 sec'],['Top Speed','149 mph'],['Drivetrain','Dual Motor AWD'],['Horsepower','670 hp']] },
+  { id:5, cat:'vehicles', name:'Cybertruck',
+    desc:'Tri-motor. 845 hp. 0–60 in 2.6 sec. 11,000 lb tow capacity. Cold-rolled stainless steel exoskeleton.',
+    price:'$30,350', availability:'Limited',
+    images:['images/Cybertruck-Hero-Desktop-NA-SA-APAC.avif', 'images/Cybertruck-InsideOutside-Carousel-Slide-2-Enter-Desktop.avif', 'images/Cybertruck-InsideOutside-Carousel-Slide-3-Fun-Desktop.avif'],
+    colors:[{name:'Stainless',hex:'linear-gradient(135deg,#c8c8c8,#e8e8e8)',gradient:true},{name:'Matte Black',hex:'#1a1a1a'},{name:'Satin White',hex:'#f5f5f5',border:true}],
+    specs:[['Range','320 mi'],['0–60 mph','2.6 sec'],['Tow Capacity','11,000 lbs'],['Drivetrain','Tri-Motor AWD'],['Horsepower','845 hp']] },
+  // ENERGY
+  { id:6, cat:'energy', name:'Solar panel + Powerwall 3',
+    desc:"Tesla's most powerful home battery. 13.5 kWh with integrated solar inverter and whole-home backup in under 100ms.",
+    price:'$11,500', availability:'Order Now',
+    images:['images/Solar-Panels-Sleek-Carousel-Slide-1-Desktop.avif','images/Solar-Panels-Save-Desktop.avif','images/Solar-Panels-Sleek-Desktop.avif'],
+    colors:[{name:'Matte White',hex:'#f5f5f5',border:true}],
+    specs:[['Capacity','13.5 kWh'],['Continuous Power','11.5 kW'],['Peak Power','22 kW'],['Solar Inverter','Integrated'],['Warranty','10 years']] },
+  { id:7, cat:'energy', name:'Powerwall',
+    desc:'Two Powerwall 3 units with rooftop solar for total energy independence. Store the sun, power everything.',
+    price:'$22,000', availability:'Order Now',
+    images:['images/Powerwall-Charge-on-Solar-Desktop_V2.avif','images/1M-Powerwalls-Powerwall-3-Hero-Desktop.avif'],
+    colors:[{name:'Matte White',hex:'#f5f5f5',border:true}],
+    specs:[['Total Storage','27 kWh'],['Continuous Output','23 kW'],['Units','2× Powerwall 3'],['Solar Input','~12 kW peak'],['Monitoring','Tesla App']] },
+  { id:8, cat:'energy', name:'Solar Roof',
+    desc:'Replace your roof and generate clean energy simultaneously. Tiles are virtually indistinguishable from premium roofing.',
+    price:'From $35,000', availability:'Order Now',
+    images:['images/Solar-Roof-Complement-Your-Home-Desktop-new.avif','images/energy_configurator_sroof_hero.avif'],
+    colors:[{name:'Slate Black',hex:'#2c2c2c'},{name:'Terra Cotta',hex:'#8b6552'}],
+    specs:[['Output','~10 kW peak'],['Efficiency','Up to 22.8%'],['Wind Rating','166 mph'],['Power Warranty','25 years'],['Weatherization','Lifetime']] },
+  { id:9, cat:'energy', name:'Megapack',
+    desc:'Utility-scale energy storage. 3 MWh per unit with integrated thermal management and 15-year warranty. Powering the grid, sustainably.',
+    price:'From $35,000', availability:'Order Now',
+    images:['images/Megapack-Transforming-Industrial-Energy-V1-Desktop.avif','images/Megapack-Power-More-V1-Desktop.avif'],
+    colors:[{name:'Slate Black',hex:'#2c2c2c'},{name:'Terra Cotta',hex:'#8b6552'}],
+    specs:[['Output','~10 kW peak'],['Efficiency','Up to 22.8%'],['Wind Rating','166 mph'],['Power Warranty','25 years'],['Weatherization','Lifetime']] },
+  ];
+
+/* ════════════════════════════════════
+   STATE
+════════════════════════════════════ */
+let appState = { cat:'all', search:'' };
+let currentItem = null, curImgs = [], curIdx = 0, savedIds = new Set();
+
+const CAT_LABELS = { vehicles:'Vehicle', energy:'Energy', charging:'Charging' };
+const CAT_BADGE  = { vehicles:'badge-vehicles', energy:'badge-energy', charging:'badge-charging' };
+
+function availCls(a) {
+  return a==='In Stock' ? 'avail-in' : a==='Limited' ? 'avail-limited' : 'avail-order';
+}
+function genRef() {
+  return 'TSL-' + Date.now().toString(36).toUpperCase().slice(-5) + '-' + Math.random().toString(36).toUpperCase().slice(2,5);
+}
+
+/* ════════════════════════════════════
+   RENDER CARDS
+════════════════════════════════════ */
+function getFiltered() {
+  return items.filter(i => {
+    if (appState.cat !== 'all' && i.cat !== appState.cat) return false;
+    if (appState.search) {
+      const q = appState.search.toLowerCase();
+      return i.name.toLowerCase().includes(q) || i.desc.toLowerCase().includes(q);
+    }
+    return true;
+  });
+}
+
+function render() {
+  const list = getFiltered();
+  const grid = document.getElementById('grid');
+  document.getElementById('resultsInfo').textContent = list.length + ' result' + (list.length!==1?'s':'');
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><h3>No results found</h3><p>Try a different search term or category.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(i => `
+    <div class="card">
+      <div class="card-img-wrap">
+        <img class="card-img" src="${i.images[0]}" alt="${i.name}" loading="lazy">
+        <span class="card-badge ${CAT_BADGE[i.cat]}">${CAT_LABELS[i.cat]}</span>
+        <span class="avail-badge ${availCls(i.availability)}">${i.availability}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${CAT_LABELS[i.cat]}</div>
+        <div class="card-name">${i.name}</div>
+        <p class="card-desc">${i.desc}</p>
+        <div class="card-price">${i.price}</div>
+        <div class="card-actions">
+          <button class="btn-primary" onclick="startOrder(${i.id})">Order Now</button>
+          <button class="btn-outline" onclick="openDetail(${i.id})">Details</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ════════════════════════════════════
+   DETAIL MODAL
+════════════════════════════════════ */
+function openDetail(id) {
+  const item = items.find(i=>i.id===id);
+  if (!item) return;
+  currentItem = item; curImgs = item.images; curIdx = 0;
+
+  document.getElementById('mCat').textContent   = CAT_LABELS[item.cat];
+  document.getElementById('mName').textContent  = item.name;
+  document.getElementById('mDesc').textContent  = item.desc;
+  document.getElementById('mPrice').textContent = item.price;
+
+  const av = document.getElementById('mAvail');
+  av.textContent = item.availability; av.className = 'modal-avail '+availCls(item.availability);
+
+  document.getElementById('mSpecs').innerHTML = item.specs.map(([k,v])=>
+    `<div class="spec-row"><span class="spec-key">${k}</span><span class="spec-val">${v}</span></div>`).join('');
+
+  document.getElementById('modalThumbs').innerHTML = curImgs.map((src,i)=>
+    `<div class="modal-thumb ${i===0?'active':''}" onclick="setGallImg(${i})"><img src="${src}" alt=""></div>`).join('');
+
+  document.getElementById('modalMainImg').src = curImgs[0];
+  updateCounter();
+
+  const sb = document.getElementById('modalSaveBtn');
+  sb.className   = savedIds.has(id) ? 'modal-save-btn saved' : 'modal-save-btn';
+  sb.textContent = savedIds.has(id) ? '♥ Saved' : '♡ Save';
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function setGallImg(idx) {
+  curIdx = idx;
+  const img = document.getElementById('modalMainImg');
+  img.classList.add('fade');
+  setTimeout(()=>{ img.src = curImgs[idx]; img.classList.remove('fade'); }, 220);
+  document.querySelectorAll('.modal-thumb').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  updateCounter();
+}
+
+function updateCounter() {
+  const el = document.getElementById('modalCounter');
+  if (curImgs.length > 1) { el.textContent=(curIdx+1)+' / '+curImgs.length; el.style.display='block'; }
+  else el.style.display='none';
+}
+
+function closeDetail() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentItem = null;
+}
+
+document.getElementById('modalSaveBtn').addEventListener('click', function() {
+  if (!currentItem) return;
+  const id = currentItem.id;
+  if (savedIds.has(id)) { savedIds.delete(id); this.textContent='♡ Save'; this.classList.remove('saved'); }
+  else { savedIds.add(id); this.textContent='♥ Saved'; this.classList.add('saved'); }
+});
+
+document.getElementById('modalOrderBtn').addEventListener('click', ()=>{
+  if (!currentItem) return;
+  const id = currentItem.id;
+  closeDetail();
+  setTimeout(()=>startOrder(id), 240);
+});
+
+document.getElementById('modalClose').addEventListener('click', closeDetail);
+document.getElementById('overlay').addEventListener('click', e=>{ if(e.target.id==='overlay') closeDetail(); });
+
+/* ════════════════════════════════════
+   CRYPTO PAYMENT DATA
+════════════════════════════════════ */
+const payCoinData = {
+  btc: {
+    name:'Bitcoin', symbol:'BTC', network:'Bitcoin Network',
+    address:'bc1qdcrr2d8mplk7zjmhhnnq66upcxdxfnjz84n2dq',
+    icon:'₿', color:'#F7931A', lightBg:'rgba(247,147,26,0.09)',
+    noticeTxt:'Send only <strong>Bitcoin (BTC)</strong> to this address. Sending any other asset will result in permanent loss.',
+    noticeColor:'#d97706', noticeBg:'rgba(247,147,26,0.07)', noticeBorder:'#F7931A',
+    btnBg:'#F7931A', btnHover:'#e07d0a',
+    qrSrc:'images/btc.jpeg'
+  },
+  eth: {
+    name:'Ethereum', symbol:'ETH', network:'ERC-20 Network',
+    address:'0xc450B674760Ef3a9302BFC35c46D614f9dbB4bDD',
+    icon:'Ξ', color:'#627EEA', lightBg:'rgba(98,126,234,0.09)',
+    noticeTxt:'Send only <strong>ETH</strong> or <strong>ERC-20 tokens</strong> to this address on the Ethereum network.',
+    noticeColor:'#4a66d5', noticeBg:'rgba(98,126,234,0.07)', noticeBorder:'#627EEA',
+    btnBg:'#627EEA', btnHover:'#4a66d5',
+    qrSrc:'images/Eth.jpeg'
+  }
+};
+let payActiveCoin = 'btc';
+
+function renderPayCard(coinKey) {
+  const c = payCoinData[coinKey];
+  // Header
+  document.getElementById('payCardHeader').innerHTML =
+    `<div class="pay-card-badge" style="background:${c.lightBg};color:${c.color};font-size:17px;">${c.icon}</div>`+
+    `<div><div style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--ink);margin-bottom:3px;">${c.name} Payment</div>`+
+    `<div style="display:flex;align-items:center;gap:6px;">`+
+    `<span style="display:inline-flex;align-items:center;gap:4px;background:${c.lightBg};color:${c.color};font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 9px;border-radius:99px;">`+
+    `<svg width="6" height="6" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3.5" fill="${c.color}"/></svg>${c.network}</span>`+
+    `<span style="font-size:0.66rem;color:var(--muted);">Avg. 1–3 block confirmations</span></div></div>`;
+  // Notice
+  const notice = document.getElementById('payNotice');
+  notice.style.background = c.noticeBg;
+  notice.style.borderLeftColor = c.noticeBorder;
+  notice.style.color = c.noticeColor;
+  notice.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>${c.noticeTxt}</span>`;
+  // Wallet
+  document.getElementById('payNetworkLabel').textContent = c.network;
+  document.getElementById('payWalletAddr').textContent = c.address;
+  // QR
+  const qrBox = document.getElementById('payQrBox');
+  qrBox.innerHTML = c.qrSrc
+    ? `<img src="${c.qrSrc}" alt="${c.symbol} QR" style="width:100%;height:100%;object-fit:contain;border-radius:7px;">`
+    : `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:0.6rem;color:var(--muted);text-align:center;">QR N/A</div>`;
+  // Copy btn colors
+  const cb = document.getElementById('payCopyBtn');
+  cb.style.background = c.lightBg;
+  cb.style.color = c.color;
+  // Submit btn
+  const sb = document.getElementById('paySubmitBtn');
+  sb.style.background = c.btnBg;
+  sb.style.boxShadow = `0 4px 14px ${c.lightBg}`;
+  sb.onmouseover = ()=>{ sb.style.background=c.btnHover; };
+  sb.onmouseout  = ()=>{ sb.style.background=c.btnBg; };
+}
+
+function selectPayCoin(coinKey) {
+  payActiveCoin = coinKey;
+  document.querySelectorAll('.pay-coin-tab').forEach(t => t.classList.toggle('active', t.dataset.coin===coinKey));
+  const cb = document.getElementById('payCopyBtn');
+  cb.classList.remove('copied');
+  cb.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy`;
+  renderPayCard(coinKey);
+}
+
+function copyPayAddress() {
+  const addr = payCoinData[payActiveCoin].address;
+  const btn = document.getElementById('payCopyBtn');
+  const c = payCoinData[payActiveCoin];
+  const setDone = () => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Copied!`;
+    setTimeout(()=>{
+      btn.classList.remove('copied');
+      btn.style.background = c.lightBg; btn.style.color = c.color;
+      btn.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy`;
+    }, 2500);
+  };
+  navigator.clipboard.writeText(addr).then(setDone).catch(()=>{
+    const ta=document.createElement('textarea'); ta.value=addr; ta.style.cssText='position:fixed;opacity:0;';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    setDone();
+  });
+}
+
+function handlePayUpload(input) {
+  const zone = document.getElementById('payUploadZone');
+  const content = document.getElementById('payUploadContent');
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    zone.classList.add('has-file');
+    content.innerHTML = `<div style="width:38px;height:38px;background:rgba(22,163,74,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;"><svg width="18" height="18" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><p style="font-size:0.8rem;font-weight:600;color:#16a34a;margin-bottom:3px;">Receipt attached</p><p style="font-size:0.72rem;color:var(--muted);">${file.name} · ${(file.size/1024).toFixed(1)} KB</p>`;
+  }
+}
+
+function submitPayment() {
+  const amount = parseFloat(document.getElementById('payAmount').value);
+  if (!amount || amount <= 0) {
+    document.getElementById('payAmount').style.borderColor = 'var(--accent)';
+    document.getElementById('payAmount').focus();
+    return;
+  }
+  document.getElementById('payAmount').style.borderColor = '';
+  const fileInput = document.getElementById('payReceiptFile');
+  if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+    const zone = document.getElementById('payUploadZone');
+    zone.style.borderColor = 'var(--accent)';
+    setTimeout(()=>{ zone.style.borderColor=''; }, 2000);
+    return;
+  }
+  goOrderStep(3);
+}
+
+/* ════════════════════════════════════
+   ORDER FLOW
+════════════════════════════════════ */
+function startOrder(id) {
+  const item = items.find(i=>i.id===id);
+  if (!item) return;
+
+  document.getElementById('oImg').src           = item.images[0];
+  document.getElementById('oName').textContent  = item.name;
+  document.getElementById('oPrice').textContent = item.price;
+  const oa = document.getElementById('oAvail');
+  oa.textContent = item.availability; oa.className = 'modal-avail '+availCls(item.availability);
+
+  const wrap = document.getElementById('oColorWrap');
+  const pick = document.getElementById('oColors');
+  if (item.colors && item.colors.length > 1) {
+    wrap.style.display = 'block';
+    pick.innerHTML = item.colors.map((c,i)=>`
+      <div class="color-dot ${i===0?'selected':''}"
+           style="background:${c.gradient?c.hex:c.hex};${c.border?'box-shadow:inset 0 0 0 1.5px #ccc;':''}"
+           data-name="${c.name}" onclick="pickColor(this)"></div>`).join('');
+  } else { wrap.style.display='none'; }
+
+  // Reset delivery fields
+  ['fName','fEmail','fPhone','fAddress','fZip'].forEach(fid=>{
+    const el=document.getElementById(fid); el.value=''; el.classList.remove('invalid');
+  });
+  document.getElementById('fState').value='';
+  document.querySelectorAll('.field-err').forEach(e=>e.style.display='none');
+
+  // Reset payment step
+  payActiveCoin = 'btc';
+  document.querySelectorAll('.pay-coin-tab').forEach(t=>t.classList.toggle('active', t.dataset.coin==='btc'));
+  document.getElementById('payAmount').value = '';
+  document.getElementById('payReceiptFile').value = '';
+  const zone = document.getElementById('payUploadZone');
+  const content = document.getElementById('payUploadContent');
+  zone.classList.remove('has-file');
+  content.innerHTML = `<div class="pay-upload-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><p style="font-size:0.8rem;font-weight:600;color:#374151;margin-bottom:3px;">Upload Payment Screenshot</p><p style="font-size:0.72rem;color:var(--muted);">JPG, PNG or PDF — click to browse</p>`;
+  renderPayCard('btc');
+
+  goOrderStep(1);
+  document.getElementById('orderOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function pickColor(el) {
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function goOrderStep(n) {
+  [1,2,3,4].forEach(i=>document.getElementById('ostep'+i).classList.toggle('active',i===n));
+}
+
+function validateAndSubmit() {
+  let ok = true;
+  const name=document.getElementById('fName'), errN=document.getElementById('errName');
+  if (!name.value.trim()||name.value.trim().length<2) { name.classList.add('invalid'); errN.style.display='block'; ok=false; }
+  else { name.classList.remove('invalid'); errN.style.display='none'; }
+
+  const email=document.getElementById('fEmail'), errE=document.getElementById('errEmail');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { email.classList.add('invalid'); errE.style.display='block'; ok=false; }
+  else { email.classList.remove('invalid'); errE.style.display='none'; }
+
+  const phone=document.getElementById('fPhone'), errP=document.getElementById('errPhone');
+  if (!phone.value.trim()) { phone.classList.add('invalid'); errP.style.display='block'; ok=false; }
+  else { phone.classList.remove('invalid'); errP.style.display='none'; }
+
+  const addr=document.getElementById('fAddress'), errA=document.getElementById('errAddress');
+  if (!addr.value.trim()||addr.value.trim().length<5) { addr.classList.add('invalid'); errA.style.display='block'; ok=false; }
+  else { addr.classList.remove('invalid'); errA.style.display='none'; }
+
+  const st=document.getElementById('fState'), errS=document.getElementById('errState');
+  if (!st.value) { errS.style.display='block'; ok=false; } else { errS.style.display='none'; }
+
+  const zip=document.getElementById('fZip'), errZ=document.getElementById('errZip');
+  if (!/^\d{5}$/.test(zip.value.trim())) { zip.classList.add('invalid'); errZ.style.display='block'; ok=false; }
+  else { zip.classList.remove('invalid'); errZ.style.display='none'; }
+
+  if (!ok) return;
+  document.getElementById('oRef').textContent          = genRef();
+  document.getElementById('oConfirmEmail').textContent = email.value.trim();
+  goOrderStep(4);
+}
+
+function closeOrder() {
+  document.getElementById('orderOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('orderClose').addEventListener('click', closeOrder);
+document.getElementById('orderOverlay').addEventListener('click', e=>{ if(e.target.id==='orderOverlay') closeOrder(); });
+
+/* ════════════════════════════════════
+   FILTER + SEARCH
+════════════════════════════════════ */
+document.getElementById('searchInput').addEventListener('input', e=>{
+  appState.search = e.target.value.trim(); render();
+});
+
+document.querySelectorAll('.filter-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    appState.cat = tab.dataset.cat;
+    render();
+  });
+});
+
+/* ESC closes any open modal */
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeDetail(); closeOrder(); } });
+
+/* INIT */
+render();
+</script>
+
+<!-- ── FLOATING SUPPORT BUTTON ── -->
+<style>
+.float-support-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #e31937;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(227,25,55,0.45), 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+  text-decoration: none;
+}
+.float-support-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 8px 28px rgba(227,25,55,0.55), 0 4px 12px rgba(0,0,0,0.3);
+}
+.float-support-btn:active {
+  transform: scale(0.96);
+}
+.float-support-btn svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.float-support-tooltip {
+  position: fixed;
+  bottom: 94px;
+  right: 28px;
+  z-index: 9999;
+  background: rgba(10,13,20,0.92);
+  color: rgba(255,255,255,0.85);
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 7px 13px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.float-support-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background: rgba(10,13,20,0.92);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+.float-support-btn:hover + .float-support-tooltip,
+.float-support-btn:focus + .float-support-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Pulse ring animation */
+.float-support-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(227,25,55,0.5);
+  animation: supportPulse 2.4s ease-out infinite;
+}
+@keyframes supportPulse {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  70%  { transform: scale(1.6); opacity: 0;   }
+  100% { transform: scale(1.6); opacity: 0;   }
+}
+@media (max-width: 480px) {
+  .float-support-btn  { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+  .float-support-tooltip { bottom: 80px; right: 20px; }
+}
+</style>
+<a class="float-support-btn" href="support.html" aria-label="Customer Support Chat">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+</a>
+<div class="float-support-tooltip">Chat with Support</div>
+
+</body>
+</html>

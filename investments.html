@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tesla Investments — Grow Your Wealth</title>
+    <link rel="icon" type="image/svg+xml" href="images/Logo.png">
+    
+    <link rel="stylesheet" href="/index.css">
+    <style>
+        
+
+        /* ── HERO ── */
+        .inv-hero {
+            background: linear-gradient(135deg, #0d1117 0%, #1a2744 60%, #0d1117 100%);
+            color: #fff;
+            padding: clamp(80px,12vw,140px) clamp(20px,6vw,80px) clamp(60px,8vw,100px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .inv-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(61,111,248,0.18) 0%, transparent 70%);
+        }
+        .inv-hero-eyebrow {
+            display: inline-block;
+            font-family: sans-serif; font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.16em; text-transform: uppercase;
+            color: #3d6ff8; margin-bottom: 16px;
+            background: rgba(61,111,248,0.12); padding: 6px 16px; border-radius: 20px;
+        }
+        .inv-hero h1 {
+            font-family: 'Georgia', serif;
+            font-size: clamp(2rem,5vw,3.8rem);
+            font-weight: 700; letter-spacing: -0.02em; line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        .inv-hero p {
+            font-family: sans-serif; font-size: clamp(0.95rem,1.8vw,1.15rem);
+            color: rgba(255,255,255,0.75); max-width: 600px; margin: 0 auto 36px;
+            line-height: 1.7;
+        }
+        .inv-hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+        /* ── STATS BAR ── */
+        .inv-stats-bar {
+            background: #fff; border-bottom: 1px solid #eee;
+            display: flex; justify-content: center; flex-wrap: wrap;
+            padding: 28px clamp(16px,4vw,60px); gap: 0;
+        }
+        .inv-stat-item {
+            flex: 1; min-width: 160px; max-width: 220px;
+            text-align: center; padding: 12px 20px;
+            border-right: 1px solid #eee;
+        }
+        .inv-stat-item:last-child { border-right: none; }
+        .inv-stat-num { font-family: sans-serif; font-size: clamp(1.5rem,2.5vw,2rem); font-weight: 800; color: #3d6ff8; line-height: 1; margin-bottom: 6px; }
+        .inv-stat-lbl { font-family: sans-serif; font-size: 0.75rem; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+
+        /* ── PLANS SECTION ── */
+        .inv-section { max-width: 1200px; margin: 0 auto; padding: clamp(48px,7vw,88px) clamp(16px,4vw,60px); }
+        .section-eyebrow { font-family: sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #3d6ff8; margin-bottom: 10px; display: block; }
+        .section-heading { font-family: 'Georgia', serif; font-size: clamp(1.6rem,3.5vw,2.5rem); font-weight: 700; color: #0d1117; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 14px; }
+        .section-sub { font-family: sans-serif; font-size: clamp(0.88rem,1.5vw,1rem); color: #666; line-height: 1.65; max-width: 560px; }
+
+        .plans-grid {
+            display: grid; grid-template-columns: repeat(3,1fr);
+            gap: clamp(14px,2vw,24px); margin-top: 40px;
+        }
+        .plan-card {
+            background: #fff; border: 1.5px solid #eee; border-radius: 16px;
+            padding: clamp(24px,3vw,36px); display: flex; flex-direction: column;
+            gap: 20px; position: relative; transition: box-shadow 0.25s, transform 0.2s;
+        }
+        .plan-card:hover { box-shadow: 0 8px 40px rgba(61,111,248,0.12); transform: translateY(-3px); }
+        .plan-card--featured { border-color: #3d6ff8; box-shadow: 0 4px 30px rgba(61,111,248,0.15); }
+        .plan-badge {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: #3d6ff8; color: #fff; font-family: sans-serif; font-size: 0.68rem;
+            font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+            padding: 4px 14px; border-radius: 20px; white-space: nowrap;
+        }
+        .plan-name { font-family: sans-serif; font-size: 1.1rem; font-weight: 700; color: #0d1117; }
+        .plan-return { font-family: sans-serif; font-size: clamp(2rem,3.5vw,2.8rem); font-weight: 800; color: #3d6ff8; line-height: 1; }
+        .plan-return span { font-size: 0.85rem; font-weight: 500; color: #888; display: block; margin-top: 4px; }
+        .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+        .plan-features li { font-family: sans-serif; font-size: 0.88rem; color: #444; display: flex; align-items: flex-start; gap: 10px; line-height: 1.45; }
+        .plan-features li::before { content: '✓'; color: #3d6ff8; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+        .plan-min { font-family: sans-serif; font-size: 0.78rem; font-weight: 600; color: #888; letter-spacing: 0.04em; text-transform: uppercase; border-top: 1px solid #f0f0f0; padding-top: 16px; }
+        .plan-min strong { color: #0d1117; font-size: 1.05rem; }
+
+        /* ── HOW IT WORKS ── */
+        .how-section { background: #f7f8fa; }
+        .how-inner { max-width: 1200px; margin: 0 auto; padding: clamp(48px,7vw,88px) clamp(16px,4vw,60px); }
+        .how-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(16px,2vw,28px); margin-top: 48px; position: relative; }
+        .how-steps::before {
+            content: ''; position: absolute; top: 26px; left: 10%; right: 10%; height: 2px;
+            background: linear-gradient(to right, #3d6ff8 0%, #a5b4fc 100%);
+            z-index: 0;
+        }
+        .how-step { text-align: center; position: relative; z-index: 1; }
+        .how-num {
+            width: 52px; height: 52px; background: #3d6ff8; color: #fff;
+            border-radius: 50%; font-family: sans-serif; font-size: 1rem; font-weight: 800;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
+            box-shadow: 0 0 0 6px #f7f8fa;
+        }
+        .how-step h4 { font-family: sans-serif; font-size: 0.95rem; font-weight: 700; color: #0d1117; margin-bottom: 8px; }
+        .how-step p  { font-family: sans-serif; font-size: 0.82rem; color: #666; line-height: 1.55; }
+
+        /* ── FAQ ── */
+        .faq-section { max-width: 800px; margin: 0 auto; padding: clamp(48px,7vw,88px) clamp(16px,4vw,60px); }
+        .faq-item { border-bottom: 1px solid #eee; }
+        .faq-q {
+            font-family: sans-serif; font-size: clamp(0.9rem,1.4vw,1rem); font-weight: 600; color: #0d1117;
+            padding: 20px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            gap: 16px;
+        }
+        .faq-q::after { content: '+'; font-size: 1.4rem; font-weight: 300; color: #3d6ff8; flex-shrink: 0; transition: transform 0.25s; }
+        .faq-item.open .faq-q::after { transform: rotate(45deg); }
+        .faq-a {
+            font-family: sans-serif; font-size: 0.88rem; color: #555; line-height: 1.7;
+            max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.25s;
+        }
+        .faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
+
+        /* ── CTA BANNER ── */
+        .inv-cta {
+            background: linear-gradient(135deg, #1a2744 0%, #3d6ff8 100%);
+            color: #fff; text-align: center;
+            padding: clamp(48px,8vw,88px) clamp(20px,6vw,80px);
+        }
+        .inv-cta h2 { font-family: 'Georgia', serif; font-size: clamp(1.6rem,3.5vw,2.6rem); font-weight: 700; margin-bottom: 14px; letter-spacing: -0.02em; }
+        .inv-cta p  { font-family: sans-serif; font-size: clamp(0.88rem,1.5vw,1rem); color: rgba(255,255,255,0.82); margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        .inv-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+        .btn-white { background: #fff; color: #3d6ff8; font-family: sans-serif; font-weight: 700; padding: clamp(11px,1.5vw,15px) clamp(22px,3.5vw,42px); border: none; border-radius: 4px; font-size: clamp(0.85rem,1.4vw,1rem); cursor: pointer; text-decoration: none; transition: opacity 0.2s; }
+        .btn-white:hover { opacity: 0.9; }
+        .btn-outline-white { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.6); font-family: sans-serif; font-weight: 600; padding: clamp(11px,1.5vw,15px) clamp(22px,3.5vw,42px); border-radius: 4px; font-size: clamp(0.85rem,1.4vw,1rem); cursor: pointer; text-decoration: none; backdrop-filter: blur(4px); transition: background 0.2s; }
+        .btn-outline-white:hover { background: rgba(255,255,255,0.12); }
+
+        .disclaimer { font-family: sans-serif; font-size: 0.7rem; color: #aaa; text-align: center; padding: 24px clamp(16px,4vw,60px); background: #f7f8fa; line-height: 1.6; max-width: 900px; margin: 0 auto; }
+
+        @media (max-width: 900px) { .plans-grid { grid-template-columns: 1fr; } .how-steps { grid-template-columns: 1fr 1fr; } .how-steps::before { display: none; } }
+        @media (max-width: 600px) { .inv-stats-bar { flex-direction: column; } .inv-stat-item { border-right: none; border-bottom: 1px solid #eee; max-width: 100%; } .how-steps { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+     <!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo" aria-label="Tesla">
+    <img src="images/tesla logo.png" class="logo" alt="logo">
+  </a>
+
+  <ul class="navbar-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="investments.html">Investments</a></li>
+    <li><a href="inventory.html">Inventory</a></li>
+  </ul>
+
+  <div class="navbar-cta">
+    <a href="auth.html">Get started</a>
+  </div>
+
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- ═══ MOBILE MENU ═══ -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="investments.html">Investments</a>
+  <a href="inventory.html">Inventory</a>
+  <div class="mobile-cta">
+    <a href="auth.html">Get started</a>
+  </div>
+</div>
+
+
+    <!-- HERO -->
+    <section class="inv-hero">
+        <span class="inv-hero-eyebrow">Tesla Investment Platform</span>
+        <h1>Grow Your Wealth.<br>Drive Your Dream.</h1>
+        <p>Don't have the funds for a Tesla today? Our intelligent investment platform grows your money through professional trading strategies — so you can drive home sooner than you think.</p>
+        <div class="inv-hero-btns">
+            <a href="#plans" class="btn-secondary">View Investment Plans</a>
+            <a href="#faq" class="btn-secondary">FAQs</a>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="inv-stats-bar">
+        <div class="inv-stat-item">
+            <div class="inv-stat-num">12%<sup style="font-size:0.6em">+</sup></div>
+            <div class="inv-stat-lbl">Avg. Monthly Return</div>
+        </div>
+        <div class="inv-stat-item">
+            <div class="inv-stat-num">$100</div>
+            <div class="inv-stat-lbl">Minimum Deposit</div>
+        </div>
+        <div class="inv-stat-item">
+            <div class="inv-stat-num">24/7</div>
+            <div class="inv-stat-lbl">Withdraw Anytime</div>
+        </div>
+        <div class="inv-stat-item">
+            <div class="inv-stat-num">50K+</div>
+            <div class="inv-stat-lbl">Active Investors</div>
+        </div>
+        <div class="inv-stat-item">
+            <div class="inv-stat-num">$2.1B</div>
+            <div class="inv-stat-lbl">Assets Managed</div>
+        </div>
+    </div>
+
+    <!-- PLANS -->
+    <section class="inv-section" id="plans">
+        <span class="section-eyebrow">Investment Plans</span>
+        <h2 class="section-heading">Choose Your Growth Path</h2>
+        <p class="section-sub">Pick a plan that fits your timeline and budget. All plans include real-time portfolio tracking and direct Tesla purchase integration.</p>
+
+        <div class="plans-grid">
+            <!-- Starter -->
+            <div class="plan-card">
+                <div>
+                    <div class="plan-name">Basic</div>
+                </div>
+                <ul class="plan-features">
+                    <li>Invest across diversified stock indices</li>
+                    <li>Real-time portfolio dashboard</li>
+                    <li>Payout in 72 hours</li>
+                    <li>Dedicated account manager</li>
+                    <li>Direct Tesla purchase integration</li>
+                </ul>
+                <div class="plan-min">Minimum deposit: <strong>$500</strong></div>
+                <div class="plan-min">Payout: <strong>$5,000</strong></div>
+                <a href="auth.html" class="btn-primary" style="text-align:center;">Get Started</a>
+            </div>
+
+            <!-- Growth — featured -->
+            <div class="plan-card plan-card--featured">
+                <div class="plan-badge">Most Popular</div>
+                <div>
+                    <div class="plan-name">Silver</div>
+                </div>
+                <ul class="plan-features">
+                    <li>Premium AI-driven trading strategies</li>
+                    <li>TSLA stock priority allocation</li>
+                    <li>Real-time portfolio dashboard</li>
+                    <li>Priority customer support 24/7</li>
+                    <li>Payout in 7 days</li>
+                    <li>Automated rebalancing & compounding</li>
+                    <li>Direct Tesla purchase integration</li>
+                </ul>
+                <div class="plan-min">Minimum deposit: <strong>$10000</strong></div>
+                <div class="plan-min">Payout: <strong>$25,000</strong></div>
+                <a href="auth.html" class="btn-primary" style="text-align:center;">Get Started</a>
+            </div>
+
+            <!-- Elite -->
+            <div class="plan-card">
+                <div>
+                    <div class="plan-name">Gold</div>
+                </div>
+                <ul class="plan-features">
+                    <li>Institutional-grade trading desk access</li>
+                    <li>Personalized portfolio construction</li>
+                    <li>Dedicated private wealth manager</li>
+                    <li>Options & derivatives strategies</li>
+                    <li>Payout in 14 days</li>
+                    <li>VIP Tesla purchase concierge service</li>
+                    <li>Quarterly performance review calls</li>
+                </ul>
+                <div class="plan-min">Minimum deposit: <strong>$25000</strong></div>
+                <div class="plan-min">Payout: <strong>$50,000</strong></div>
+                <a href="auth.html" class="btn-primary" style="text-align:center;">Get Started</a>
+            </div>
+
+            <!-- Growth — featured -->
+            <div class="plan-card plan-card--featured">
+                <div>
+                    <div class="plan-name">Platinum</div>
+                </div>
+                <ul class="plan-features">
+                    <li>Premium AI-driven trading strategies</li>
+                    <li>TSLA stock priority allocation</li>
+                    <li>Real-time portfolio dashboard</li>
+                    <li>Priority customer support 24/7</li>
+                    <li>Payout in 28 days</li>
+                    <li>Automated rebalancing & compounding</li>
+                    <li>Direct Tesla purchase integration</li>
+                </ul>
+                <div class="plan-min">Minimum deposit: <strong>$50,000</strong></div>
+                <div class="plan-min">Payout: <strong>$1,000,000</strong></div>
+                <a href="auth.html" class="btn-primary" style="text-align:center;">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+        <div class="how-inner">
+            <span class="section-eyebrow">The Process</span>
+            <h2 class="section-heading">How It Works</h2>
+            <p class="section-sub">From sign-up to driving your Tesla, the process is simple, transparent, and fully managed.</p>
+            <div class="how-steps">
+                <div class="how-step">
+                    <div class="how-num">01</div>
+                    <h4>Create Your Account</h4>
+                    <p>Sign up in minutes. Verify your identity and link your preferred payment method securely.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">02</div>
+                    <h4>Make a Deposit</h4>
+                    <p>Choose your plan and how much to invest. Start with as little as $100 — no large minimums.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">03</div>
+                    <h4>We Trade, You Grow</h4>
+                    <p>Our platform deploys your funds across proven trading strategies — stocks, indices, and more.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">04</div>
+                    <h4>Withdraw & Drive</h4>
+                    <p>When ready, withdraw anytime with zero lock-in. Use the funds to order your Tesla directly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+        <span class="section-eyebrow">Questions</span>
+        <h2 class="section-heading" style="max-width:100%">Frequently Asked Questions</h2>
+
+        <div id="faqList" style="margin-top:36px"></div>
+    </section>
+
+    <!-- CTA -->
+    <section class="inv-cta">
+        <h2>Start Building Toward Your Tesla Today</h2>
+        <p>Join thousands of investors already growing their wealth on the Tesla Investment Platform.</p>
+        <div class="inv-cta-btns">
+            <a href="auth.html" class="btn-white">Open an Account</a>
+            <a href="/index.html" class="btn-outline-white">Back to Home</a>
+        </div>
+    </section>
+
+    <p class="disclaimer">* Your investment is 100% guaranteed. We are so confident in our strategy that we fully back your principal—meaning that if any losses occur during trading, they will be covered by us, not you. Your original investment amount is protected, allowing you to participate in market opportunities without the risk of loss.</p>
+
+    <script>
+
+    // ─── HAMBURGER NAV ───────────────────────────────────────────────────────────
+    // ─── HAMBURGER NAV ───────────────────────────────────────────────
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', () => {
+  const isOpen = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', isOpen);
+  hamburger.setAttribute('aria-expanded', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  });
+});
+
+    // FAQ data and accordion behavior
+    (function(){
+        const faqs = [
+            {q: 'Is my investment guaranteed?', a: 'Your investment is 100% guaranteed. We are so confident in our strategy that we fully back your principal—meaning that if any losses occur during trading, they will be covered by us, not you. Your original investment amount is protected, allowing you to participate in market opportunities without the risk of loss'},
+            {q: 'Can I withdraw my money at any time?', a: 'Yes. There is no lock-in period on any of our plans. You can request a withdrawal at any time, and funds are typically processed within 1–3 business days depending on your payment method.'},
+            {q: 'What trading strategies does the platform use?', a: 'Our platform uses a combination of algorithmic trading, index-based diversification, and professionally managed active strategies including TSLA equity, tech-sector ETFs, and broader market indices. Elite plan members also gain access to options strategies.'},
+            {q: 'How do I use my investment funds to buy a Tesla?', a: 'Once your portfolio reaches your target amount, simply initiate a withdrawal and you\'ll be guided directly to our Tesla inventory page to select and order your vehicle. Our concierge team (available on Elite plans) can also handle the entire purchase process for you.'},
+            {q: 'What is the minimum amount I need to buy a Tesla through this platform?', a: 'You can start investing with as little as $100. The vehicle prices start from $38,990 for the Model 3. Our Growth Plan investors typically reach their purchase goal within 18–24 months depending on contribution amount and market performance.'},
+            {q: 'Is this platform regulated?', a: 'Our investment operations comply with applicable financial regulations. We partner with licensed financial custodians to hold and manage client assets. Please review our full terms and regulatory disclosures on the compliance page before investing.'}
+        ];
+        const container = document.getElementById('faqList');
+        faqs.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'faq-item';
+            div.innerHTML = `<div class="faq-q">${item.q}</div><div class="faq-a">${item.a}</div>`;
+            container.appendChild(div);
+        });
+        container.addEventListener('click', e => {
+            const q = e.target.closest('.faq-q');
+            if (!q) return;
+            const item = q.parentElement;
+            item.classList.toggle('open');
+        });
+    })();
+    </script>
+
+<!-- ── FLOATING SUPPORT BUTTON ── -->
+<style>
+.float-support-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #e31937;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(227,25,55,0.45), 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+  text-decoration: none;
+}
+.float-support-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 8px 28px rgba(227,25,55,0.55), 0 4px 12px rgba(0,0,0,0.3);
+}
+.float-support-btn:active {
+  transform: scale(0.96);
+}
+.float-support-btn svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.float-support-tooltip {
+  position: fixed;
+  bottom: 94px;
+  right: 28px;
+  z-index: 9999;
+  background: rgba(10,13,20,0.92);
+  color: rgba(255,255,255,0.85);
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 7px 13px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.float-support-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background: rgba(10,13,20,0.92);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+.float-support-btn:hover + .float-support-tooltip,
+.float-support-btn:focus + .float-support-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Pulse ring animation */
+.float-support-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(227,25,55,0.5);
+  animation: supportPulse 2.4s ease-out infinite;
+}
+@keyframes supportPulse {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  70%  { transform: scale(1.6); opacity: 0;   }
+  100% { transform: scale(1.6); opacity: 0;   }
+}
+@media (max-width: 480px) {
+  .float-support-btn  { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+  .float-support-tooltip { bottom: 80px; right: 20px; }
+}
+</style>
+<a class="float-support-btn" href="support.html" aria-label="Customer Support Chat">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+</a>
+<div class="float-support-tooltip">Chat with Support</div>
+
+</body>
+</html>
